@@ -329,6 +329,7 @@ while running:
                 try:
                     save_json_data("workflow.json", {"start_level":level})
                     run("python game.py")
+                    d
                 except Exception as E:
                     window = Tk()
                     window.withdraw()
