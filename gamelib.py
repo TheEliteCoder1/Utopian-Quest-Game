@@ -171,6 +171,21 @@ TRIGGERS = [
 	"destroy"
 ]
 
+BACKGROUNDS = {
+    0:{
+        "image":"assets/backgrounds/bg_shroom.png"
+    },
+    1:{
+        "image":"assets/backgrounds/bg_grasslands.png"
+    },
+    2:{
+        "image":"assets/backgrounds/bg_desert.png"
+    },
+    3:{
+        "image":"assets/backgrounds/bg_castle.png"
+    }
+}
+
 
 def draw_text(screen: pygame.Surface, font_file: str, text: str, 
     font_size: int, color: tuple, pos: tuple, backg=None):

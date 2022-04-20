@@ -1,3 +1,4 @@
+from matplotlib.pyplot import draw
 import pygame, csv
 import tkinter
 from tkinter import Tk
@@ -9,7 +10,7 @@ pygame.init()
 pygame.font.init()
 
 side_panel = 220
-side_panel_tabs = ["Tiles", "Triggers"]
+side_panel_tabs = ["Tiles", "Triggers", "Backgrounds"]
 side_panel_tab = "Tiles"
 bottom_panel = 110
 level_number = 0
@@ -30,6 +31,8 @@ ROWS = 15
 MAX_COLS = 200
 TILE_SIZE = screen_height // ROWS
 current_tile = 0
+current_background = 0
+current_ground = 0
 scroll_left = False
 scroll_right = False
 scroll = 0
@@ -41,10 +44,10 @@ for row in range(ROWS):
     r = [-1] * MAX_COLS
     world_data.append(r)
 
-ground_tile = 0
+
 # create ground
 for tile in range(0, MAX_COLS):
-    world_data[ROWS - 1][tile] = ground_tile
+    world_data[ROWS - 1][tile] = current_ground
 
 # store tiles in list
 img_list = []
@@ -52,6 +55,13 @@ for x in list(LEVEL_OBJECTS.keys()):
     img = pygame.transform.scale(pygame.image.load(LEVEL_OBJECTS[x]["image"]),
                                  LEVEL_OBJECTS[x]["size"])
     img_list.append(img)
+
+# store backgrounds in list
+background_list = []
+for x in list(BACKGROUNDS.keys()):
+    img = pygame.transform.scale(pygame.image.load(BACKGROUNDS[x]["image"]), (35, 35)) # preview size
+    background_list.append(img)
+
 
 # World Background
 bg_img = load_json_data(f'levels/{level}.json')["bg_img"]
@@ -122,6 +132,18 @@ for i in range(len(img_list)):
     if button_col == 3:
         button_row += 1.5
         button_col = 0
+
+# creating background buttons
+background_buttons_list = []
+background_button_col, background_button_row = 0, 0
+for i in range(len(background_list)):
+    background_button = button.IconButton(screen_width + (100 * background_button_col) + 40, 75 * background_button_row + 50, background_list[i], 1)
+    background_button_text = (screen, FONTS["level_editor"], BACKGROUNDS[i]["image"].partition("/")[-1].partition("/")[-1].replace(".png", ""), 14, (0,0,0), (background_button.rect.centerx, background_button.rect.centery + 34))
+    background_buttons_list.append({"button": background_button, "text": background_button_text})
+    background_button_col += 1
+    if background_button_col == 2:
+        background_button_row += 1.5
+        background_button_col = 0
 
 # Triggers
 trigger_list = []
@@ -239,6 +261,19 @@ while running:
         # highlight the selected tile
         pygame.draw.rect(screen, RED, button_list[current_tile]["button"].rect,
                          2)
+    elif side_panel_tab == "Backgrounds":
+        background_count = 0
+        for background_count, i in enumerate(background_buttons_list):
+            if i['button'].draw(screen):
+                current_background = background_count
+                bg_img = BACKGROUNDS[current_background]["image"]
+                background = pygame.image.load(bg_img).convert()
+            draw_text(i['text'][0], i['text'][1], i['text'][2], i['text'][3],
+                      i['text'][4], i['text'][5])
+
+        # highlight the selected background
+        pygame.draw.rect(screen, RED, background_buttons_list[current_background]["button"].rect, 2)
+
     elif side_panel_tab == 'Triggers':
         trigger_count = 0
         for trigger_count, i in enumerate(trigger_list):
@@ -313,10 +348,12 @@ while running:
                 scroll_right = True
             if event.key == pygame.K_RSHIFT:
                 scroll_speed = 5
-            if event.key == pygame.K_1:
+            if event.key == pygame.K_1 and pygame.key.get_mods() & pygame.KMOD_SHIFT:
                 side_panel_tab = side_panel_tabs[0]
-            if event.key == pygame.K_2:
+            if event.key == pygame.K_2 and pygame.key.get_mods() & pygame.KMOD_SHIFT:
                 side_panel_tab = side_panel_tabs[1]
+            if event.key == pygame.K_3 and pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                side_panel_tab = side_panel_tabs[2]
             if event.key == pygame.K_UP:
                 level += 1
             if event.key == pygame.K_DOWN and level > 0:
@@ -329,7 +366,6 @@ while running:
                 try:
                     save_json_data("workflow.json", {"start_level":level})
                     run("python game.py")
-                    d
                 except Exception as E:
                     window = Tk()
                     window.withdraw()
