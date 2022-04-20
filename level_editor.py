@@ -10,7 +10,7 @@ pygame.font.init()
 side_panel = 220
 side_panel_tabs = ["Tiles", "Triggers"]
 side_panel_tab = "Tiles"
-bottom_panel = 100
+bottom_panel = 110
 level_number = 0
 screen_width = 700
 screen_height = 500
@@ -162,8 +162,7 @@ def save_data():
         writer = csv.writer(csvfile, delimiter=',')
         for row in trigger_data:
             writer.writerow(row)
-    save_json_data(f'levels/{level}.json',
-                   {})
+    save_json_data(f'levels/{level}.json', {"bg_img":bg_img})
 
 
 while running:
@@ -244,11 +243,6 @@ while running:
         pygame.draw.rect(screen, RED, button_list[current_tile]["button"].rect,
                          2)
     elif side_panel_tab == 'Triggers':
-        # highlight the selected trigger
-        # try:
-        pygame.draw.rect(screen, (255,0,0), trigger_list[])
-        # except:
-        #     selected_trigger = 0
         trigger_count = 0
         for trigger_count, i in enumerate(trigger_list):
             pygame.draw.circle(*i['button'])
@@ -258,6 +252,11 @@ while running:
                                width=2)
             draw_text(*i['desc_text'])
             draw_text(*i['num'])
+        # highlight the selected trigger
+        try:
+            pygame.draw.circle(screen, (255,0,0), (trigger_list[selected_trigger]["rect"].x + (TILE_SIZE/2), trigger_list[selected_trigger]["rect"].y + 16), radius=20, width=2)
+        except:
+            selected_trigger = 0
 
     # scroll the map
     if scroll_left == True and scroll > 0:

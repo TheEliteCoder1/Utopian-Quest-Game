@@ -29,6 +29,10 @@ background = pygame.image.load(bg_img).convert()
 moving_left = False
 moving_right = False
 
+# background music
+music = pygame.mixer.music.load("assets/music/music.wav")
+pygame.mixer.music.play(-1)
+
 # fx
 coin_fx = pygame.mixer.Sound('assets/music/coin.mp3')
 coin_fx.set_volume(0.5)
@@ -41,6 +45,18 @@ explosive_fx.set_volume(0.5)
 
 death_fx = pygame.mixer.Sound('assets/music/death.mp3')
 death_fx.set_volume(0.5)
+
+jump_fx = pygame.mixer.Sound('assets/music/jump.wav')
+jump_fx.set_volume(0.5)
+
+destroy_fx = pygame.mixer.Sound('assets/music/destroy.wav')
+destroy_fx.set_volume(0.5)
+
+triggered_fx = pygame.mixer.Sound('assets/music/triggered.wav')
+triggered_fx.set_volume(0.5)
+
+uptrigger_fx = pygame.mixer.Sound('assets/music/uptrigger.wav')
+uptrigger_fx.set_volume(0.5)
 
 
 class Player(pygame.sprite.Sprite):
@@ -116,6 +132,7 @@ class Player(pygame.sprite.Sprite):
 
         #jump
         if self.jump == True and self.in_air == False:
+            jump_fx.play()
             self.vel_y = -7
             self.jump = False
             self.in_air = True
@@ -155,19 +172,24 @@ class Player(pygame.sprite.Sprite):
                         move_x = 10
                         move_y = 5
                         if trigger == 0:
-                            if self.rect.x > 0:
+                            if self.rect.x > 0 + tile[0].get_width():
+                                triggered_fx.play()
                                 tile[1].x -= move_x
                         if trigger == 1:
-                            if self.rect.x < screen.get_width():
+                            if self.rect.x < screen.get_width() - tile[0].get_width():
+                                triggered_fx.play()
                                 tile[1].x += move_x
                         if trigger == 2:
-                            if self.rect.y > 0:
+                            if self.rect.y > 0 + tile[0].get_height():
+                                uptrigger_fx.play()
                                 tile[1].y -= move_y
                         if trigger == 3:
                             if self.rect.y < screen.get_height(
                             ) - tile[0].get_height():
+                                triggered_fx.play(1)
                                 tile[1].y += move_y
                         if trigger == 4:
+                            destroy_fx.play()
                             world.objects_list.remove(tile)
                     except:
                         pass
@@ -251,7 +273,10 @@ class Player(pygame.sprite.Sprite):
             self.speed = 0
             self.alive = False
             self.update_action(3)
+            pygame.mixer.music.stop()
             death_fx.play()
+            pygame.time.delay(round(death_fx.get_length())*1000)
+            pygame.mixer.music.play()
 
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False),
@@ -395,8 +420,10 @@ while running:
         screen_scroll, level_complete = player.move(moving_left, moving_right)
         bg_scroll -= screen_scroll
         if level_complete:
+            pygame.mixer.music.stop()
             level_end_fx.play()
             pygame.time.delay(5000)
+            pygame.mixer.music.play()
             level += 1
             bg_scroll = 0
             world_data = []

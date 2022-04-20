@@ -129,6 +129,36 @@ LEVEL_OBJECTS = {
 		"descriptor":"Decor",
 		"animation":None,
 		"size":(50, 50)
+	},
+    17:{
+		"image":"assets/levelObjects/up.png",
+		"descriptor":"Block",
+		"animation":None,
+		"size":(35, 35)
+	},
+    18:{
+		"image":"assets/levelObjects/down.png",
+		"descriptor":"Block",
+		"animation":None,
+		"size":(35, 35)
+	},
+    19:{
+		"image":"assets/levelObjects/left.png",
+		"descriptor":"Block",
+		"animation":None,
+		"size":(35, 35)
+	},
+    20:{
+		"image":"assets/levelObjects/right.png",
+		"descriptor":"Block",
+		"animation":None,
+		"size":(35, 35)
+	},
+    21:{
+		"image":"assets/levelObjects/destroy.png",
+		"descriptor":"Block",
+		"animation":None,
+		"size":(35, 35)
 	}
 }
 
