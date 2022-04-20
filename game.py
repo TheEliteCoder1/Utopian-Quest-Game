@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import csv
 from gamelib import *
 
@@ -20,7 +20,7 @@ bg_scroll = 0
 screen_scroll = 0
 SCROLL_THRESH = 250
 COLS = 200
-level = 0
+level = load_json_data('workflow.json')["start_level"]
 MAX_LEVELS = 10
 bg_img = load_json_data(f'levels/{level}.json')["bg_img"]
 background = pygame.image.load(bg_img).convert()
@@ -37,13 +37,13 @@ pygame.mixer.music.play(-1)
 coin_fx = pygame.mixer.Sound('assets/music/coin.mp3')
 coin_fx.set_volume(0.5)
 
-level_end_fx = pygame.mixer.Sound('assets/music/level_end.mp3')
+level_end_fx = pygame.mixer.Sound('assets/music/level_end.wav')
 level_end_fx.set_volume(0.5)
 
 explosive_fx = pygame.mixer.Sound('assets/music/explosive.wav')
 explosive_fx.set_volume(0.5)
 
-death_fx = pygame.mixer.Sound('assets/music/death.mp3')
+death_fx = pygame.mixer.Sound('assets/music/death.wav')
 death_fx.set_volume(0.5)
 
 jump_fx = pygame.mixer.Sound('assets/music/jump.wav')
@@ -275,8 +275,8 @@ class Player(pygame.sprite.Sprite):
             self.update_action(3)
             pygame.mixer.music.stop()
             death_fx.play()
-            pygame.time.delay(round(death_fx.get_length())*1000)
-            pygame.mixer.music.play()
+            pygame.time.delay(2500)
+            pygame.mixer.music.play(-1)
 
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False),
@@ -423,7 +423,7 @@ while running:
             pygame.mixer.music.stop()
             level_end_fx.play()
             pygame.time.delay(5000)
-            pygame.mixer.music.play()
+            pygame.mixer.music.play(-1)
             level += 1
             bg_scroll = 0
             world_data = []

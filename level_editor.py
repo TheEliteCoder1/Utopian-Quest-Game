@@ -1,6 +1,7 @@
 import pygame, csv
 import tkinter
 from tkinter import Tk
+from tkinter.messagebox import showerror
 import button
 from gamelib import *
 
@@ -179,10 +180,6 @@ while running:
 
     #save and load data
     if save_button.draw(screen):
-        # save level data
-        # window = Tk()
-        # window.withdraw()
-        # window.attributes("-topmost", True)
         root = tkinter.Tk()
         root.geometry('400x100')
         root.title("Confirm Overwite Level")
@@ -300,6 +297,7 @@ while running:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            save_json_data("workflow.json", {"start_level":0})
             running = False
             pygame.quit()
             quit()
@@ -327,6 +325,16 @@ while running:
                 selected_trigger -= 1
             if event.key == pygame.K_s and selected_trigger < len(TRIGGERS):
                 selected_trigger += 1
+            if event.key == pygame.K_t and pygame.key.get_mods() & pygame.KMOD_CTRL:
+                try:
+                    save_json_data("workflow.json", {"start_level":level})
+                    run("python game.py")
+                except Exception as E:
+                    window = Tk()
+                    window.withdraw()
+                    window.attributes("-topmost", True)
+                    tkinter.messagebox.showerror(title="Level-Debugger [TestMode] Error.", message=f"Failed to execute level because Python or the Subprocess Module was not Installed Properly. Contact RaphTheCoder for help. DETAILS: {E}")
+                    window.destroy()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
