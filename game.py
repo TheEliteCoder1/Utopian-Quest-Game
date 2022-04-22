@@ -1,6 +1,7 @@
 import pygame, sys
 import csv
 from gamelib import *
+from classes import Dynamite
 
 pygame.init()
 pygame.mixer.init()
@@ -290,6 +291,8 @@ for x in list(LEVEL_OBJECTS.keys()):
                                  LEVEL_OBJECTS[x]["size"])
     img_list.append(img)
 
+# sprite groups
+dynamite_group = pygame.sprite.Group()
 
 def draw_bg(screen, background):
     screen.fill((255, 255, 255))
@@ -307,7 +310,7 @@ class World():
         self.level_length = len(data[0])
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
-                if tile >= 0:
+                if tile >= 0 and tile != 22:
                     img = pygame.transform.scale(
                         pygame.image.load(LEVEL_OBJECTS[tile]["image"]),
                         LEVEL_OBJECTS[tile]["size"])
@@ -318,6 +321,9 @@ class World():
                         img, img_rect, LEVEL_OBJECTS[tile]["descriptor"]
                     ]
                     self.objects_list.append(tile_data)
+                elif tile == 22:
+                    dynamite = Dynamite(x * TILE_SIZE, y * TILE_SIZE)
+                    dynamite_group.add(dynamite)
         for y, row in enumerate(trigger_data):
             for x, trigger in enumerate(row):
                 if trigger >= 0:
@@ -399,6 +405,7 @@ while running:
     # draw game every frame.
     draw_bg(screen, background)
     world.draw()
+    dynamite_group.draw(screen)
     player.update()
     player.draw()
     draw_text(screen, FONTS['game_info'], "LEVEL: " + str(level), 30,
@@ -411,6 +418,7 @@ while running:
     except:
         pass
     if player.alive:
+        dynamite_group.update(1)
         if player.in_air:
             player.update_action(2)  #2: jump
         elif moving_left or moving_right:
@@ -427,6 +435,7 @@ while running:
             level += 1
             bg_scroll = 0
             world_data = []
+            dynamite_group.reset()
             for row in range(ROWS):
                 r = [-1] * COLS
                 world_data.append(r)
@@ -454,6 +463,7 @@ while running:
     else:
         bg_scroll = 0
         world_data = []
+        dynamite_group.reset()
         for row in range(ROWS):
             r = [-1] * COLS
             world_data.append(r)

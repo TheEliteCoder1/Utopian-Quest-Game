@@ -32,135 +32,116 @@ LEVEL_OBJECTS = {
     0:{
         "image":"assets/levelObjects/grass.png",
         "descriptor":"Block",
-        "animation":None,
         "size":(35, 35)
     },
     1:{
         "image":"assets/levelObjects/bush.png",
         "descriptor":"Decor",
-        "animation":None, 
         "size":(35, 35)
     },
     2:{
         "image":"assets/levelObjects/mushroomRed.png",
-        "descriptor":"Decor",
-        "animation":None,
+        "descriptor":"Decor",        
         "size":(35, 35)
     },
     3:{
         "image":"assets/levelObjects/plant.png",
-        "descriptor":"Decor",
-        "animation":None,
+        "descriptor":"Decor",        
         "size":(35, 35)
     },
     4:{
         "image":"assets/levelObjects/brick2.png",
         "descriptor":"Block",
-        "animation":None,
         "size":(35, 35)
     },
     5:{
         "image":"assets/levelObjects/brick1.png",
-        "descriptor":"Block",
-        "animation":None,
+        "descriptor":"Block",        
         "size":(35, 35)
     },
     6:{
         "image":"assets/levelObjects/fence.png",
-        "descriptor":"Decor",
-        "animation":None,
+        "descriptor":"Decor",        
         "size":(35, 35)
     },
     7:{
         "image":"assets/levelObjects/chain.png",
-        "descriptor":"Decor",
-        "animation":None,
+        "descriptor":"Decor",        
         "size":(35, 35)
     },
     8:{
         "image":"assets/levelObjects/bat.png",
         "descriptor":"Enemy",
-        "animation":None,
         "size":(35, 35)
     },
     9:{
         "image":"assets/levelObjects/coinGold.png",
-        "descriptor":"Currency",
-        "animation":None,
+        "descriptor":"Currency",        
         "size":(35, 35)
     },
     10:{
         "image":"assets/levelObjects/bee.png",
-        "descriptor":"Enemy",
-        "animation":None,
+        "descriptor":"Enemy",        
         "size":(35, 35)
     },
     11:{
         "image":"assets/levelObjects/gemBlue.png",
-        "descriptor":"Currency",
-        "animation":None,
+        "descriptor":"Currency",        
         "size":(35, 35)
     },
     12:{
         "image":"assets/levelObjects/shieldGold.png",
         "descriptor":"Healer",
-        "animation":None,
         "size":(35, 35)
     },
     13:{
         "image":"assets/levelObjects/cloud3.png",
-        "descriptor":"Decor",
-        "animation":None,
+        "descriptor":"Decor",        
         "size":(45, 35)
     },
     14:{
         "image":"assets/levelObjects/keyRed.png",
-        "descriptor":"Goal",
-        "animation":None,
+        "descriptor":"Goal",        
         "size":(35, 35)
     },
     15:{
         "image":"assets/levelObjects/bomb.png",
-        "descriptor":"Explodable",
-        "animation":None,
+        "descriptor":"Explodable",        
         "size":(35, 35)
     },
 	16:{
 		"image":"assets/levelObjects/flag.png",
 		"descriptor":"Decor",
-		"animation":None,
 		"size":(50, 50)
 	},
     17:{
 		"image":"assets/levelObjects/up.png",
-		"descriptor":"Block",
-		"animation":None,
+		"descriptor":"Block",		
 		"size":(35, 35)
 	},
     18:{
 		"image":"assets/levelObjects/down.png",
-		"descriptor":"Block",
-		"animation":None,
+		"descriptor":"Block",		
 		"size":(35, 35)
 	},
     19:{
 		"image":"assets/levelObjects/left.png",
 		"descriptor":"Block",
-		"animation":None,
 		"size":(35, 35)
 	},
     20:{
 		"image":"assets/levelObjects/right.png",
 		"descriptor":"Block",
-		"animation":None,
 		"size":(35, 35)
 	},
     21:{
 		"image":"assets/levelObjects/destroy.png",
 		"descriptor":"Block",
-		"animation":None,
 		"size":(35, 35)
-	}
+	},
+    22:{
+        "image":"assets/animations/dynamite-0.png"
+    }
 }
 
 TRIGGERS = [
