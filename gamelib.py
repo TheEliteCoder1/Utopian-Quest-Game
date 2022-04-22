@@ -140,7 +140,8 @@ LEVEL_OBJECTS = {
 		"size":(35, 35)
 	},
     22:{
-        "image":"assets/animations/dynamite-0.png"
+        "image":"assets/animations/dynamite/dynamite-0.png",
+        "size":(35, 45)
     }
 }
 

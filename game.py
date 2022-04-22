@@ -224,6 +224,11 @@ class Player(pygame.sprite.Sprite):
         # if pygame.sprite.spritecollide(self, water_group, False):
         # 	self.health = 0
 
+        # check for dynamites
+        dynamites = pygame.sprite.spritecollide(self, dynamite_group, False)
+        for dynamite in dynamites:
+            dynamite.start_burning = True
+
         #check if fallen off the map
         if self.rect.bottom > screen_height:
             self.hearts = 0
@@ -435,7 +440,7 @@ while running:
             level += 1
             bg_scroll = 0
             world_data = []
-            dynamite_group.reset()
+            dynamite_group.empty()
             for row in range(ROWS):
                 r = [-1] * COLS
                 world_data.append(r)
@@ -463,7 +468,7 @@ while running:
     else:
         bg_scroll = 0
         world_data = []
-        dynamite_group.reset()
+        dynamite_group.empty()
         for row in range(ROWS):
             r = [-1] * COLS
             world_data.append(r)
