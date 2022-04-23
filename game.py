@@ -59,6 +59,9 @@ triggered_fx.set_volume(0.5)
 uptrigger_fx = pygame.mixer.Sound('assets/music/uptrigger.wav')
 uptrigger_fx.set_volume(0.5)
 
+hurt_fx = pygame.mixer.Sound('assets/music/hurt.wav')
+hurt_fx.set_volume(0.5)
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, x, y, character, scale, speed):
@@ -221,7 +224,10 @@ class Player(pygame.sprite.Sprite):
                     level_complete = True
 
         if pygame.sprite.spritecollide(self, glurdle_group, False):
-            pass
+            hurt_fx.play()
+            self.react_to_explosion = True
+            self.hearts -= 1
+            glurdle_group.remove(pygame.sprite.spritecollide(self, glurdle_group, False))
 
 
         #check if fallen off the map
