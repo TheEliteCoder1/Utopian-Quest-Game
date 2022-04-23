@@ -70,78 +70,73 @@ LEVEL_OBJECTS = {
         "size":(35, 35)
     },
     8:{
-        "image":"assets/levelObjects/bat.png",
-        "descriptor":"Enemy",
-        "size":(35, 35)
-    },
-    9:{
         "image":"assets/levelObjects/coinGold.png",
         "descriptor":"Currency",        
         "size":(35, 35)
     },
-    10:{
-        "image":"assets/levelObjects/bee.png",
-        "descriptor":"Enemy",        
-        "size":(35, 35)
-    },
-    11:{
+    9:{
         "image":"assets/levelObjects/gemBlue.png",
         "descriptor":"Currency",        
         "size":(35, 35)
     },
-    12:{
+    10:{
         "image":"assets/levelObjects/shieldGold.png",
         "descriptor":"Healer",
         "size":(35, 35)
     },
-    13:{
+    11:{
         "image":"assets/levelObjects/cloud3.png",
         "descriptor":"Decor",        
         "size":(45, 35)
     },
-    14:{
+    12:{
         "image":"assets/levelObjects/keyRed.png",
         "descriptor":"Goal",        
         "size":(35, 35)
     },
-    15:{
+    13:{
         "image":"assets/levelObjects/bomb.png",
         "descriptor":"Explodable",        
         "size":(35, 35)
     },
-	16:{
+	14:{
 		"image":"assets/levelObjects/flag.png",
 		"descriptor":"Decor",
 		"size":(50, 50)
 	},
-    17:{
+    15:{
 		"image":"assets/levelObjects/up.png",
 		"descriptor":"Block",		
 		"size":(35, 35)
 	},
-    18:{
+    16:{
 		"image":"assets/levelObjects/down.png",
 		"descriptor":"Block",		
 		"size":(35, 35)
 	},
-    19:{
+    17:{
 		"image":"assets/levelObjects/left.png",
 		"descriptor":"Block",
 		"size":(35, 35)
 	},
-    20:{
+    18:{
 		"image":"assets/levelObjects/right.png",
 		"descriptor":"Block",
 		"size":(35, 35)
 	},
-    21:{
+    19:{
 		"image":"assets/levelObjects/destroy.png",
 		"descriptor":"Block",
 		"size":(35, 35)
 	},
-    22:{
+    20:{
         "image":"assets/animations/dynamite/dynamite-0.png",
-        "size":(35, 45)
+        "size":(35, 45),
+        "name":"dynamite"
+    },
+    21:{
+        "image":"assets/levelObjects/glurdle.png",
+        "size":(35, 35)
     }
 }
 

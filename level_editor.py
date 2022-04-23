@@ -123,9 +123,10 @@ button_col, button_row = 0, 0
 for i in range(len(img_list)):
     tile_button = button.IconButton(screen_width + (60 * button_col) + 30,
                                     50 * button_row + 20, img_list[i], 1)
+    text = LEVEL_OBJECTS[i]["image"].partition("/")[-1].partition(
+                     "/")[-1].replace(".png", "") if "name" not in list(LEVEL_OBJECTS[i].keys()) else LEVEL_OBJECTS[i]["name"]
     tile_text = (screen, FONTS["level_editor"],
-                 LEVEL_OBJECTS[i]["image"].partition("/")[-1].partition(
-                     "/")[-1].replace(".png", ""), 12, (0, 0, 0),
+                 text, 12, (0, 0, 0),
                  (tile_button.rect.centerx, tile_button.rect.centery + 34))
     button_list.append({"button": tile_button, "text": tile_text})
     button_col += 1

@@ -1,7 +1,7 @@
 import pygame, sys
 import csv
 from gamelib import *
-from classes import Dynamite
+from classes import Dynamite, Glurdle
 
 pygame.init()
 pygame.mixer.init()
@@ -220,14 +220,9 @@ class Player(pygame.sprite.Sprite):
                             self.height):
                     level_complete = True
 
-        # #check for collision with water
-        # if pygame.sprite.spritecollide(self, water_group, False):
-        # 	self.health = 0
+        if pygame.sprite.spritecollide(self, glurdle_group, False):
+            pass
 
-        # check for dynamites
-        dynamites = pygame.sprite.spritecollide(self, dynamite_group, False)
-        for dynamite in dynamites:
-            dynamite.start_burning = True
 
         #check if fallen off the map
         if self.rect.bottom > screen_height:
@@ -298,6 +293,7 @@ for x in list(LEVEL_OBJECTS.keys()):
 
 # sprite groups
 dynamite_group = pygame.sprite.Group()
+glurdle_group = pygame.sprite.Group()
 
 def draw_bg(screen, background):
     screen.fill((255, 255, 255))
@@ -315,7 +311,7 @@ class World():
         self.level_length = len(data[0])
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
-                if tile >= 0 and tile != 22:
+                if tile >= 0 and tile < 20:
                     img = pygame.transform.scale(
                         pygame.image.load(LEVEL_OBJECTS[tile]["image"]),
                         LEVEL_OBJECTS[tile]["size"])
@@ -326,9 +322,12 @@ class World():
                         img, img_rect, LEVEL_OBJECTS[tile]["descriptor"]
                     ]
                     self.objects_list.append(tile_data)
-                elif tile == 22:
+                elif tile == 20:
                     dynamite = Dynamite(x * TILE_SIZE, y * TILE_SIZE)
                     dynamite_group.add(dynamite)
+                elif tile == 21:
+                    glurdle = Glurdle(x * TILE_SIZE, y * TILE_SIZE)
+                    glurdle_group.add(glurdle)
         for y, row in enumerate(trigger_data):
             for x, trigger in enumerate(row):
                 if trigger >= 0:
@@ -339,12 +338,6 @@ class World():
         for tile in self.objects_list:
             tile[1][0] += screen_scroll
             screen.blit(tile[0], tile[1])
-
-    # def draw(self):
-    # 	self.update()
-    # 	for tile in self.objects_list:
-    # 		screen.blit(tile[0], tile[1])
-
 
 #create empty tile list
 world_data = []
@@ -411,6 +404,7 @@ while running:
     draw_bg(screen, background)
     world.draw()
     dynamite_group.draw(screen)
+    glurdle_group.draw(screen)
     player.update()
     player.draw()
     draw_text(screen, FONTS['game_info'], "LEVEL: " + str(level), 30,
@@ -424,6 +418,7 @@ while running:
         pass
     if player.alive:
         dynamite_group.update(1)
+        glurdle_group.update(player, world, GRAVITY)
         if player.in_air:
             player.update_action(2)  #2: jump
         elif moving_left or moving_right:
@@ -441,6 +436,7 @@ while running:
             bg_scroll = 0
             world_data = []
             dynamite_group.empty()
+            glurdle_group.empty()
             for row in range(ROWS):
                 r = [-1] * COLS
                 world_data.append(r)
@@ -469,6 +465,7 @@ while running:
         bg_scroll = 0
         world_data = []
         dynamite_group.empty()
+        glurdle_group.empty()
         for row in range(ROWS):
             r = [-1] * COLS
             world_data.append(r)
