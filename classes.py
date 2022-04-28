@@ -50,8 +50,8 @@ class Glurdle(pygame.sprite.Sprite):
             self.move_counter *= -1
 
         #apply gravity
-        self.vel_y += grav * 10
-        if self.vel_y > 6:
+        self.vel_y += grav * 25
+        if self.vel_y > 4:
             self.vel_y
         self.deltaY += self.vel_y
 
@@ -109,5 +109,23 @@ class PlatformUp(pygame.sprite.Sprite):
         if abs(self.move_counter) > 45:
             self.move_direction *= -1
             self.move_counter *= -1
-        
-    
+
+class Key(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.smoothscale(pygame.image.load(LEVEL_OBJECTS[12]["image"]), LEVEL_OBJECTS[12]["size"])
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.move_direction = 1
+        self.move_counter = 0
+        self.deltaX, self.deltaY = 0, 0
+
+    def update(self, screen_scroll):
+        self.deltaY = (self.move_direction)
+        self.rect.y += self.deltaY
+        self.rect.x += screen_scroll
+        self.move_counter += 0.9
+        if abs(self.move_counter) > 5:
+            self.move_direction *= -1
+            self.move_counter *= -1

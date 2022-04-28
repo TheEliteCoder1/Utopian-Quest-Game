@@ -2,7 +2,7 @@ import pygame, sys
 import math
 import csv
 from gamelib import *
-from classes import Dynamite, Glurdle, PlatformUp, PlatformRight
+from classes import Dynamite, Glurdle, PlatformUp, PlatformRight, Key
 pygame.init()
 pygame.mixer.init()
 
@@ -145,7 +145,7 @@ class Player(pygame.sprite.Sprite):
             self.in_air = True
 
         #apply gravity
-        self.vel_y += GRAVITY * 1.7
+        self.vel_y += GRAVITY * 2
         if self.vel_y > 6:
             self.vel_y
         dy += self.vel_y
@@ -214,6 +214,9 @@ class Player(pygame.sprite.Sprite):
                             self.height):
                     level_complete = True
 
+        if pygame.sprite.spritecollide(self, key_group, False):
+            level_complete = True
+
         for platform in platform_group:
             #check for collision in the x direction
             if platform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
@@ -230,9 +233,10 @@ class Player(pygame.sprite.Sprite):
                     self.vel_y = 0
                     self.in_air = False
                     dy = platform.rect.top - self.rect.bottom
-                    
-                if dx == 0:
-                    self.rect.x = platform.rect.centerx - platform.deltaX
+
+                if type(platform) == PlatformRight:
+                    if dx == 0:
+                        self.rect.x = platform.rect.centerx - platform.deltaX
 
 
         if pygame.sprite.spritecollide(self, glurdle_group, False):
@@ -336,6 +340,7 @@ dynamite_group = pygame.sprite.Group()
 glurdle_group = pygame.sprite.Group()
 currency_group = pygame.sprite.Group()
 platform_group = pygame.sprite.Group()
+key_group = pygame.sprite.Group()
 
 def draw_bg(screen, background):
     screen.fill((255, 255, 255))
@@ -353,7 +358,7 @@ class World():
         self.level_length = len(data[0])
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
-                if tile >= 0 and tile < 20 and tile != 8 and tile != 9:
+                if tile >= 0 and tile < 20 and tile != 8 and tile != 9 and tile != 12:
                     img = pygame.transform.scale(
                         pygame.image.load(LEVEL_OBJECTS[tile]["image"]),
                         LEVEL_OBJECTS[tile]["size"])
@@ -364,6 +369,9 @@ class World():
                         img, img_rect, LEVEL_OBJECTS[tile]["descriptor"]
                 	]
                     self.objects_list.append(tile_data)
+                elif tile == 12:
+                    key = Key(x * TILE_SIZE, y * TILE_SIZE)
+                    key_group.add(key)
                 elif tile == 8 or tile == 9:
                     currency = Currency(x * TILE_SIZE, y * TILE_SIZE, LEVEL_OBJECTS[tile]["image"])
                     currency_group.add(currency)
@@ -455,6 +463,7 @@ while running:
     world.draw()
     dynamite_group.draw(screen)
     platform_group.draw(screen)
+    key_group.draw(screen)
     glurdle_group.draw(screen)
     player.update()
     player.draw()
@@ -470,6 +479,7 @@ while running:
     if player.alive:
         platform_group.update(screen_scroll)
         dynamite_group.update(1)
+        key_group.update(screen_scroll)
         glurdle_group.update(screen_scroll, world, GRAVITY)
         currency_group.update()
         if player.in_air:
@@ -488,6 +498,9 @@ while running:
             level += 1
             bg_scroll = 0
             world_data = []
+            key_group.empty()
+            platform_group.empty()
+            currency_group.empty()
             dynamite_group.empty()
             glurdle_group.empty()
             for row in range(ROWS):
@@ -518,6 +531,7 @@ while running:
         bg_scroll = 0
         world_data = []
         platform_group.empty()
+        key_group.empty()
         dynamite_group.empty()
         glurdle_group.empty()
         currency_group.empty()

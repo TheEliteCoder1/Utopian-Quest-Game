@@ -32,72 +32,72 @@ LEVEL_OBJECTS = {
     0:{
         "image":"assets/levelObjects/grass.png",
         "descriptor":"Block",
-        "size":(40, 40)
+        "size":(35, 35)
     },
     1:{
         "image":"assets/levelObjects/bush.png",
         "descriptor":"Decor",
-        "size":(40, 40)
+        "size":(35, 35)
     },
     2:{
         "image":"assets/levelObjects/mushroomRed.png",
         "descriptor":"Decor",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     3:{
         "image":"assets/levelObjects/plant.png",
         "descriptor":"Decor",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     4:{
         "image":"assets/levelObjects/brick2.png",
         "descriptor":"Block",
-        "size":(40, 40)
+        "size":(35, 35)
     },
     5:{
         "image":"assets/levelObjects/brick1.png",
         "descriptor":"Block",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     6:{
         "image":"assets/levelObjects/fence.png",
         "descriptor":"Decor",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     7:{
         "image":"assets/levelObjects/chain.png",
         "descriptor":"Decor",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     8:{
         "image":"assets/levelObjects/coinGold.png",
         "descriptor":"Currency",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     9:{
         "image":"assets/levelObjects/gemBlue.png",
         "descriptor":"Currency",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     10:{
         "image":"assets/levelObjects/shieldGold.png",
         "descriptor":"Healer",
-        "size":(40, 40)
+        "size":(35, 35)
     },
     11:{
         "image":"assets/levelObjects/cloud3.png",
         "descriptor":"Decor",        
-        "size":(45, 40)
+        "size":(45, 35)
     },
     12:{
         "image":"assets/levelObjects/keyRed.png",
         "descriptor":"Goal",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
     13:{
         "image":"assets/levelObjects/bomb.png",
         "descriptor":"Explodable",        
-        "size":(40, 40)
+        "size":(35, 35)
     },
 	14:{
 		"image":"assets/levelObjects/flag.png",
@@ -107,44 +107,44 @@ LEVEL_OBJECTS = {
     15:{
 		"image":"assets/levelObjects/up.png",
 		"descriptor":"Block",		
-		"size":(40, 40)
+		"size":(35, 35)
 	},
     16:{
 		"image":"assets/levelObjects/down.png",
 		"descriptor":"Block",		
-		"size":(40, 40)
+		"size":(35, 35)
 	},
     17:{
 		"image":"assets/levelObjects/left.png",
 		"descriptor":"Block",
-		"size":(40, 40)
+		"size":(35, 35)
 	},
     18:{
 		"image":"assets/levelObjects/right.png",
 		"descriptor":"Block",
-		"size":(40, 40)
+		"size":(35, 35)
 	},
     19:{
 		"image":"assets/levelObjects/destroy.png",
 		"descriptor":"Block",
-		"size":(40, 40)
+		"size":(35, 35)
 	},
     20:{
         "image":"assets/animations/dynamite/dynamite-0.png",
-        "size":(40, 45),
+        "size":(35, 45),
         "name":"dynamite"
     },
     21:{
         "image":"assets/levelObjects/glurdle.png",
-        "size":(40, 40)
+        "size":(35, 35)
     },
     22:{
         "image":"assets/levelObjects/platUp.png",
-        "size":(40,40)
+        "size":(35,35)
     },
     23:{
         "image":"assets/levelObjects/platRight.png",
-        "size":(40,40)
+        "size":(35,35)
     }
 }
 

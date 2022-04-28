@@ -28,7 +28,7 @@ clock = pygame.time.Clock()
 level = 0
 ROWS = 15
 MAX_COLS = 200
-TILE_SIZE = TILE_SIZE = screen_height // ROWS
+TILE_SIZE = screen_height // ROWS
 current_tile = 0
 current_background = 0
 current_ground = 0
