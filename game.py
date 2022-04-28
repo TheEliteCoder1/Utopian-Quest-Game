@@ -37,31 +37,31 @@ pygame.mixer.music.play(-1)
 
 # fx
 coin_fx = pygame.mixer.Sound('assets/music/coin.mp3')
-coin_fx.set_volume(0.5)
+coin_fx.set_volume(1)
 
 level_end_fx = pygame.mixer.Sound('assets/music/level_end.wav')
-level_end_fx.set_volume(0.5)
+level_end_fx.set_volume(1)
 
-explosive_fx = pygame.mixer.Sound('assets/music/explosive.wav')
-explosive_fx.set_volume(0.5)
+explosive_fx = pygame.mixer.Sound('assets/music/explosion.wav')
+explosive_fx.set_volume(1)
 
 death_fx = pygame.mixer.Sound('assets/music/death.wav')
-death_fx.set_volume(0.5)
+death_fx.set_volume(1)
 
 jump_fx = pygame.mixer.Sound('assets/music/jump.wav')
-jump_fx.set_volume(0.5)
+jump_fx.set_volume(1)
 
 destroy_fx = pygame.mixer.Sound('assets/music/destroy.wav')
-destroy_fx.set_volume(0.5)
+destroy_fx.set_volume(1)
 
 triggered_fx = pygame.mixer.Sound('assets/music/triggered.wav')
-triggered_fx.set_volume(0.5)
+triggered_fx.set_volume(1)
 
 uptrigger_fx = pygame.mixer.Sound('assets/music/uptrigger.wav')
-uptrigger_fx.set_volume(0.5)
+uptrigger_fx.set_volume(1)
 
 hurt_fx = pygame.mixer.Sound('assets/music/hurt.wav')
-hurt_fx.set_volume(0.5)
+hurt_fx.set_volume(1)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, x, y, character, scale, speed):
@@ -86,7 +86,7 @@ class Player(pygame.sprite.Sprite):
         self.idling_counter = 0
 
         #load all images for the players
-        animation_types = ['Idle', 'Run', 'Death']
+        animation_types = ['Idle', 'Run', "Jump", 'Death']
         for animation in animation_types:
             #reset temporary list of images
             temp_list = []
@@ -304,7 +304,7 @@ class Player(pygame.sprite.Sprite):
             self.update_action(3)
             pygame.mixer.music.stop()
             death_fx.play()
-            pygame.time.delay(2500)
+            pygame.time.delay(5000)
             pygame.mixer.music.play(-1)
 
     def draw(self):
@@ -423,7 +423,7 @@ with open(f'levels/{level}-triggers.csv', newline='') as csvfile:
 
 world = World()
 world.process_data(world_data, trigger_data)
-player = Player(screen, 30, 0, "Boro", 0.7, 5)
+player = Player(screen, 30, 0, "Boro", 1, 5)
 
 while running:
     clock.tick(fps)
