@@ -32,7 +32,7 @@ moving_left = False
 moving_right = False
 
 # background music
-pygame.mixer.music.load("assets/music/music.wav")
+pygame.mixer.music.load("assets/music/music.mp3")
 pygame.mixer.music.play(-1)
 
 # fx
