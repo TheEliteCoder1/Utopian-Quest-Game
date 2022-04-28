@@ -7,8 +7,8 @@ pygame.font.init()
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-RED = (235, 0, 0)
-GREEN = (0, 235, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 BLUE = (10, 30, 255)
 
 def load_json_data(json_file):
@@ -32,72 +32,72 @@ LEVEL_OBJECTS = {
     0:{
         "image":"assets/levelObjects/grass.png",
         "descriptor":"Block",
-        "size":(35, 35)
+        "size":(40, 40)
     },
     1:{
         "image":"assets/levelObjects/bush.png",
         "descriptor":"Decor",
-        "size":(35, 35)
+        "size":(40, 40)
     },
     2:{
         "image":"assets/levelObjects/mushroomRed.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     3:{
         "image":"assets/levelObjects/plant.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     4:{
         "image":"assets/levelObjects/brick2.png",
         "descriptor":"Block",
-        "size":(35, 35)
+        "size":(40, 40)
     },
     5:{
         "image":"assets/levelObjects/brick1.png",
         "descriptor":"Block",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     6:{
         "image":"assets/levelObjects/fence.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     7:{
         "image":"assets/levelObjects/chain.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     8:{
         "image":"assets/levelObjects/coinGold.png",
         "descriptor":"Currency",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     9:{
         "image":"assets/levelObjects/gemBlue.png",
         "descriptor":"Currency",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     10:{
         "image":"assets/levelObjects/shieldGold.png",
         "descriptor":"Healer",
-        "size":(35, 35)
+        "size":(40, 40)
     },
     11:{
         "image":"assets/levelObjects/cloud3.png",
         "descriptor":"Decor",        
-        "size":(45, 35)
+        "size":(45, 40)
     },
     12:{
         "image":"assets/levelObjects/keyRed.png",
         "descriptor":"Goal",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
     13:{
         "image":"assets/levelObjects/bomb.png",
         "descriptor":"Explodable",        
-        "size":(35, 35)
+        "size":(40, 40)
     },
 	14:{
 		"image":"assets/levelObjects/flag.png",
@@ -107,36 +107,44 @@ LEVEL_OBJECTS = {
     15:{
 		"image":"assets/levelObjects/up.png",
 		"descriptor":"Block",		
-		"size":(35, 35)
+		"size":(40, 40)
 	},
     16:{
 		"image":"assets/levelObjects/down.png",
 		"descriptor":"Block",		
-		"size":(35, 35)
+		"size":(40, 40)
 	},
     17:{
 		"image":"assets/levelObjects/left.png",
 		"descriptor":"Block",
-		"size":(35, 35)
+		"size":(40, 40)
 	},
     18:{
 		"image":"assets/levelObjects/right.png",
 		"descriptor":"Block",
-		"size":(35, 35)
+		"size":(40, 40)
 	},
     19:{
 		"image":"assets/levelObjects/destroy.png",
 		"descriptor":"Block",
-		"size":(35, 35)
+		"size":(40, 40)
 	},
     20:{
         "image":"assets/animations/dynamite/dynamite-0.png",
-        "size":(35, 45),
+        "size":(40, 45),
         "name":"dynamite"
     },
     21:{
         "image":"assets/levelObjects/glurdle.png",
-        "size":(35, 35)
+        "size":(40, 40)
+    },
+    22:{
+        "image":"assets/levelObjects/platUp.png",
+        "size":(40,40)
+    },
+    23:{
+        "image":"assets/levelObjects/platRight.png",
+        "size":(40,40)
     }
 }
 

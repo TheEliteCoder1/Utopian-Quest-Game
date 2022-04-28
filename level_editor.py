@@ -1,4 +1,3 @@
-from matplotlib.pyplot import draw
 import pygame, csv
 import tkinter
 from tkinter import Tk
@@ -29,7 +28,7 @@ clock = pygame.time.Clock()
 level = 0
 ROWS = 15
 MAX_COLS = 200
-TILE_SIZE = screen_height // ROWS
+TILE_SIZE = TILE_SIZE = screen_height // ROWS
 current_tile = 0
 current_background = 0
 current_ground = 0
@@ -52,7 +51,7 @@ for tile in range(0, MAX_COLS):
 # store tiles in list
 img_list = []
 for x in list(LEVEL_OBJECTS.keys()):
-    img = pygame.transform.scale(pygame.image.load(LEVEL_OBJECTS[x]["image"]),
+    img = pygame.transform.smoothscale(pygame.image.load(LEVEL_OBJECTS[x]["image"]),
                                  LEVEL_OBJECTS[x]["size"])
     img_list.append(img)
 
@@ -195,7 +194,7 @@ while running:
     # draw background and text
     screen.fill((255, 213, 128))
     width = background.get_width()
-    for x in range(4):
+    for x in range(5):
         screen.blit(background, ((x * width) - scroll * 0.5, 0))
     draw_grid()
     draw_world()
@@ -238,7 +237,7 @@ while running:
 
     # drawing level info
     draw_text(screen, FONTS['game_info'], "LEVEL: " + str(level), 30,
-              (194, 255, 255), (75, screen_constants['margin_y'] - 30))
+              (0, 0, 0), (75, screen_constants['margin_y'] - 30))
     draw_text(screen,
               font_file=FONTS['game_info'],
               text="Press Up or Down to change level".upper(),
@@ -260,7 +259,7 @@ while running:
                       i['text'][4], i['text'][5])
 
         # highlight the selected tile
-        pygame.draw.rect(screen, RED, button_list[current_tile]["button"].rect,
+        pygame.draw.rect(screen, WHITE, button_list[current_tile]["button"].rect,
                          2)
     elif side_panel_tab == "Backgrounds":
         background_count = 0
@@ -273,7 +272,7 @@ while running:
                       i['text'][4], i['text'][5])
 
         # highlight the selected background
-        pygame.draw.rect(screen, RED, background_buttons_list[current_background]["button"].rect, 2)
+        pygame.draw.rect(screen, WHITE, background_buttons_list[current_background]["button"].rect, 2)
 
     elif side_panel_tab == 'Triggers':
         trigger_count = 0
@@ -287,7 +286,7 @@ while running:
             draw_text(*i['num'])
         # highlight the selected trigger
         try:
-            pygame.draw.circle(screen, (255,0,0), (trigger_list[selected_trigger]["rect"].x + (TILE_SIZE/2), trigger_list[selected_trigger]["rect"].y + 16), radius=20, width=2)
+            pygame.draw.circle(screen, (255,0,0), (trigger_list[selected_trigger]["rect"].x + (TILE_SIZE/2), trigger_list[selected_trigger]["rect"].y + 20), radius=20, width=2)
         except:
             selected_trigger = 0
 

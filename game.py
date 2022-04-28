@@ -1,8 +1,8 @@
 import pygame, sys
+import math
 import csv
 from gamelib import *
-from classes import Dynamite, Glurdle
-
+from classes import Dynamite, Glurdle, PlatformUp, PlatformRight
 pygame.init()
 pygame.mixer.init()
 
@@ -15,23 +15,24 @@ running = True
 fps = 30
 clock = pygame.time.Clock()
 GRAVITY = 0.2
-ROWS = 16
-TILE_SIZE = screen_height // ROWS
+ROWS = 15
+TILE_SIZE = TILE_SIZE = screen_height // ROWS
 bg_scroll = 0
 screen_scroll = 0
-SCROLL_THRESH = 250
+SCROLL_THRESH = 300
 COLS = 200
 level = load_json_data('workflow.json')["start_level"]
 MAX_LEVELS = 10
 bg_img = load_json_data(f'levels/{level}.json')["bg_img"]
 background = pygame.image.load(bg_img).convert()
+currency_spinning_angle = 0
 
 # define player action variables
 moving_left = False
 moving_right = False
 
 # background music
-music = pygame.mixer.music.load("assets/music/music.wav")
+pygame.mixer.music.load("assets/music/music.wav")
 pygame.mixer.music.play(-1)
 
 # fx
@@ -62,7 +63,6 @@ uptrigger_fx.set_volume(0.5)
 hurt_fx = pygame.mixer.Sound('assets/music/hurt.wav')
 hurt_fx.set_volume(0.5)
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, x, y, character, scale, speed):
         pygame.sprite.Sprite.__init__(self)
@@ -82,7 +82,6 @@ class Player(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
         #ai specific variables
         self.move_counter = 0
-        self.vision = pygame.Rect(0, 0, 150, 20)
         self.idling = False
         self.idling_counter = 0
 
@@ -102,13 +101,13 @@ class Player(pygame.sprite.Sprite):
                     img.get_width() * scale), int(img.get_height() * scale)))
                 temp_list.append(img)
             self.animation_list.append(temp_list)
-
         self.image = self.animation_list[self.action][self.frame_index]
         self.rect = self.image.get_rect()
+        self.vision = pygame.Rect(30, 0, 150, 20)
         self.rect.center = (x, y)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-
+        
         for tile in world.objects_list:
             for trigger in world.triggers:
                 if (tile[1][0], tile[1][1]) == (trigger[0], trigger[1]):
@@ -146,7 +145,7 @@ class Player(pygame.sprite.Sprite):
             self.in_air = True
 
         #apply gravity
-        self.vel_y += GRAVITY * 2
+        self.vel_y += GRAVITY * 1.7
         if self.vel_y > 6:
             self.vel_y
         dy += self.vel_y
@@ -197,14 +196,6 @@ class Player(pygame.sprite.Sprite):
                             world.objects_list.remove(tile)
                     except:
                         pass
-            elif tile[2] == 'Currency':
-                if tile[1].colliderect(
-                        self.rect.x + dx, self.rect.y, self.width,
-                        self.height) or tile[1].colliderect(
-                            self.rect.x, self.rect.y + dy, self.width,
-                            self.height):
-                    coin_fx.play()
-                    world.objects_list.remove(tile)
             elif tile[2] == 'Explodable':
                 if tile[1].colliderect(
                         self.rect.x + dx, self.rect.y, self.width,
@@ -223,12 +214,37 @@ class Player(pygame.sprite.Sprite):
                             self.height):
                     level_complete = True
 
+        for platform in platform_group:
+            #check for collision in the x direction
+            if platform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+                dx = 0
+            #check for collision in the y direction
+            if platform.rect.colliderect(self.rect.x, self.rect.y + dy,
+                                   self.width, self.height):
+                #check if below the ground, i.e. jumping
+                if self.vel_y < 0:
+                    self.vel_y = 0
+                    dy = platform.rect.bottom - self.rect.top
+                #check if above the ground, i.e. falling
+                elif self.vel_y >= 0:
+                    self.vel_y = 0
+                    self.in_air = False
+                    dy = platform.rect.top - self.rect.bottom
+                    
+                if dx == 0:
+                    self.rect.x = platform.rect.centerx - platform.deltaX
+
+
         if pygame.sprite.spritecollide(self, glurdle_group, False):
             hurt_fx.play()
-            self.react_to_explosion = True
+            self.vel_y = -7
+            self.in_air = True
             self.hearts -= 1
             glurdle_group.remove(pygame.sprite.spritecollide(self, glurdle_group, False))
-
+            
+        if pygame.sprite.spritecollide(self, currency_group, False):
+            coin_fx.play()
+            currency_group.remove(pygame.sprite.spritecollide(self, currency_group, False))
 
         #check if fallen off the map
         if self.rect.bottom > screen_height:
@@ -241,12 +257,14 @@ class Player(pygame.sprite.Sprite):
         #update rectangle position
         self.rect.x += dx
         self.rect.y += dy
+        self.vision.center = (self.rect.centerx + 75 * self.direction, self.rect.centery)
 
         #update scroll based on player position
         if (self.rect.right > screen_width - SCROLL_THRESH and bg_scroll < (world.level_length * TILE_SIZE) - screen_width)\
          or (self.rect.left < SCROLL_THRESH and bg_scroll > abs(dx)):
             self.rect.x -= dx
             screen_scroll = -dx
+		
 
         return screen_scroll, level_complete
 
@@ -289,6 +307,22 @@ class Player(pygame.sprite.Sprite):
         screen.blit(pygame.transform.flip(self.image, self.flip, False),
                     self.rect)
 
+class Currency(pygame.sprite.Sprite):
+    def __init__(self, x, y, img):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(img)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self):
+        self.rect.x += screen_scroll
+        new_width = round(math.sin(math.radians(currency_spinning_angle)) * self.rect.width)
+        rot_currency = self.image if new_width >= 0 else pygame.transform.flip(
+            self.image, True, False)
+        rot_currency = pygame.transform.scale(
+            rot_currency, (abs(new_width), self.rect.height))
+        screen.blit(rot_currency, rot_currency.get_rect(center=(self.rect.topleft[0] + (self.rect.width/4), self.rect.topleft[1])))
 
 # store tiles in list
 img_list = []
@@ -300,6 +334,8 @@ for x in list(LEVEL_OBJECTS.keys()):
 # sprite groups
 dynamite_group = pygame.sprite.Group()
 glurdle_group = pygame.sprite.Group()
+currency_group = pygame.sprite.Group()
+platform_group = pygame.sprite.Group()
 
 def draw_bg(screen, background):
     screen.fill((255, 255, 255))
@@ -312,12 +348,12 @@ class World():
     def __init__(self):
         self.objects_list = []
         self.triggers = []
-
+        
     def process_data(self, data, trigger_data):
         self.level_length = len(data[0])
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
-                if tile >= 0 and tile < 20:
+                if tile >= 0 and tile < 20 and tile != 8 and tile != 9:
                     img = pygame.transform.scale(
                         pygame.image.load(LEVEL_OBJECTS[tile]["image"]),
                         LEVEL_OBJECTS[tile]["size"])
@@ -326,14 +362,24 @@ class World():
                     img_rect.y = y * TILE_SIZE
                     tile_data = [
                         img, img_rect, LEVEL_OBJECTS[tile]["descriptor"]
-                    ]
+                	]
                     self.objects_list.append(tile_data)
+                elif tile == 8 or tile == 9:
+                    currency = Currency(x * TILE_SIZE, y * TILE_SIZE, LEVEL_OBJECTS[tile]["image"])
+                    currency_group.add(currency)
                 elif tile == 20:
                     dynamite = Dynamite(x * TILE_SIZE, y * TILE_SIZE)
                     dynamite_group.add(dynamite)
                 elif tile == 21:
                     glurdle = Glurdle(x * TILE_SIZE, y * TILE_SIZE)
                     glurdle_group.add(glurdle)
+                elif tile == 22:
+                    platform = PlatformUp(x * TILE_SIZE, y * TILE_SIZE)
+                    platform_group.add(platform)
+                elif tile == 23:
+                    platform = PlatformRight(x * TILE_SIZE, y * TILE_SIZE)
+                    platform_group.add(platform)
+                    
         for y, row in enumerate(trigger_data):
             for x, trigger in enumerate(row):
                 if trigger >= 0:
@@ -369,10 +415,7 @@ with open(f'levels/{level}-triggers.csv', newline='') as csvfile:
 
 world = World()
 world.process_data(world_data, trigger_data)
-player = Player(screen, 30, 0, "Boro", 0.5, 5)
-
-# Player
-# player = Player(screen, 20, screen_constants['bottom_y'], player_character, selected_level.rect_list)
+player = Player(screen, 30, 0, "Boro", 0.7, 5)
 
 while running:
     clock.tick(fps)
@@ -407,14 +450,16 @@ while running:
             pass
 
     # draw game every frame.
+    currency_spinning_angle += 5
     draw_bg(screen, background)
     world.draw()
     dynamite_group.draw(screen)
+    platform_group.draw(screen)
     glurdle_group.draw(screen)
     player.update()
     player.draw()
     draw_text(screen, FONTS['game_info'], "LEVEL: " + str(level), 30,
-              (255, 213, 128), (75, screen_constants['margin_y'] - 30))
+              (0, 0, 0), (75, screen_constants['margin_y'] - 30))
     try:
         for x in range(player.hearts):
             img = pygame.transform.smoothscale(
@@ -423,8 +468,10 @@ while running:
     except:
         pass
     if player.alive:
+        platform_group.update(screen_scroll)
         dynamite_group.update(1)
-        glurdle_group.update(player, world, GRAVITY)
+        glurdle_group.update(screen_scroll, world, GRAVITY)
+        currency_group.update()
         if player.in_air:
             player.update_action(2)  #2: jump
         elif moving_left or moving_right:
@@ -466,12 +513,14 @@ while running:
                         trigger_data[x][y] = int(trigger)
             world = World()
             world.process_data(world_data, trigger_data)
-            player = Player(screen, 30, 0, "Boro", 0.5, 5)
+            player = Player(screen, 30, 0, "Boro", 0.7, 5)
     else:
         bg_scroll = 0
         world_data = []
+        platform_group.empty()
         dynamite_group.empty()
         glurdle_group.empty()
+        currency_group.empty()
         for row in range(ROWS):
             r = [-1] * COLS
             world_data.append(r)
@@ -495,6 +544,7 @@ while running:
                     trigger_data[x][y] = int(trigger)
         world = World()
         world.process_data(world_data, trigger_data)
-        player = Player(screen, 30, 0, "Boro", 0.5, 5)
+        player = Player(screen, 30, 0, "Boro", 0.7, 5)
+        
 
     pygame.display.update()
