@@ -1,2 +1,1 @@
-language = "python3"
-run = ""
+language = "pygame"

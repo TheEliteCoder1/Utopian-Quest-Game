@@ -1,6 +1,7 @@
-import pygame, os, json
+import pygame, os, json, sys
 from subprocess import run
 pygame.init()
+pygame.mixer.init()
 pygame.font.init()
 
 """This module is a library that provides colors, fonts, assets, settings & utility functions for the game."""
@@ -10,6 +11,39 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (10, 30, 255)
+
+
+# background music
+music = pygame.mixer.music.load("assets/music/music.mp3")
+pygame.mixer.music.play(-1)
+
+# fx
+coin_fx = pygame.mixer.Sound('assets/music/coin.mp3')
+coin_fx.set_volume(1)
+
+level_end_fx = pygame.mixer.Sound('assets/music/level_end.wav')
+level_end_fx.set_volume(1)
+
+explosive_fx = pygame.mixer.Sound('assets/music/explosion.wav')
+explosive_fx.set_volume(1)
+
+death_fx = pygame.mixer.Sound('assets/music/death.wav')
+death_fx.set_volume(1)
+
+jump_fx = pygame.mixer.Sound('assets/music/jump.wav')
+jump_fx.set_volume(1)
+
+destroy_fx = pygame.mixer.Sound('assets/music/destroy.wav')
+destroy_fx.set_volume(1)
+
+triggered_fx = pygame.mixer.Sound('assets/music/triggered.wav')
+triggered_fx.set_volume(1)
+
+uptrigger_fx = pygame.mixer.Sound('assets/music/uptrigger.wav')
+uptrigger_fx.set_volume(1)
+
+hurt_fx = pygame.mixer.Sound('assets/music/hurt.wav')
+hurt_fx.set_volume(1)
 
 def load_json_data(json_file):
     with open(json_file, 'r') as sf:
@@ -32,72 +66,72 @@ LEVEL_OBJECTS = {
     0:{
         "image":"assets/levelObjects/grass.png",
         "descriptor":"Block",
-        "size":(35, 35)
+        "size":(46, 46)
     },
     1:{
         "image":"assets/levelObjects/bush.png",
         "descriptor":"Decor",
-        "size":(35, 35)
+        "size":(46, 46)
     },
     2:{
         "image":"assets/levelObjects/mushroomRed.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
     3:{
         "image":"assets/levelObjects/plant.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
     4:{
-        "image":"assets/levelObjects/brick2.png",
-        "descriptor":"Block",
-        "size":(35, 35)
+        "image":"assets/levelObjects/platDown.png",
+        "descriptor":"PlatformDown",
+        "size":(46, 46)
     },
     5:{
-        "image":"assets/levelObjects/brick1.png",
-        "descriptor":"Block",        
-        "size":(35, 35)
+        "image":"assets/levelObjects/platLeft.png",
+        "descriptor":"PlatformLeft",        
+        "size":(46, 46)
     },
     6:{
         "image":"assets/levelObjects/fence.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
     7:{
         "image":"assets/levelObjects/chain.png",
         "descriptor":"Decor",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
     8:{
         "image":"assets/levelObjects/coinGold.png",
         "descriptor":"Currency",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
     9:{
         "image":"assets/levelObjects/gemBlue.png",
         "descriptor":"Currency",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
     10:{
         "image":"assets/levelObjects/shieldGold.png",
         "descriptor":"Healer",
-        "size":(35, 35)
+        "size":(46, 46)
     },
     11:{
-        "image":"assets/levelObjects/cloud3.png",
+        "image":"assets/levelObjects/cloud.png",
         "descriptor":"Decor",        
-        "size":(45, 35)
+        "size":(120, 60)
     },
     12:{
         "image":"assets/levelObjects/keyRed.png",
         "descriptor":"Goal",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
     13:{
         "image":"assets/levelObjects/bomb.png",
         "descriptor":"Explodable",        
-        "size":(35, 35)
+        "size":(46, 46)
     },
 	14:{
 		"image":"assets/levelObjects/flag.png",
@@ -107,44 +141,51 @@ LEVEL_OBJECTS = {
     15:{
 		"image":"assets/levelObjects/up.png",
 		"descriptor":"Block",		
-		"size":(35, 35)
+		"size":(46, 46)
 	},
     16:{
 		"image":"assets/levelObjects/down.png",
 		"descriptor":"Block",		
-		"size":(35, 35)
+		"size":(46, 46)
 	},
     17:{
 		"image":"assets/levelObjects/left.png",
 		"descriptor":"Block",
-		"size":(35, 35)
+		"size":(46, 46)
 	},
     18:{
 		"image":"assets/levelObjects/right.png",
 		"descriptor":"Block",
-		"size":(35, 35)
+		"size":(46, 46)
 	},
     19:{
 		"image":"assets/levelObjects/destroy.png",
 		"descriptor":"Block",
-		"size":(35, 35)
+		"size":(46, 46)
 	},
-    20:{
-        "image":"assets/animations/dynamite/dynamite-0.png",
-        "size":(35, 45),
-        "name":"dynamite"
+    20: {
+        "image":"assets/levelObjects/fence.png",
+        "descriptor":"Block",
+        "size":(46, 46)
     },
+    # 20:{
+    #     "image":"assets/levelObjects/health_potion.png",
+    #     "size":(46, 46),
+    # },
     21:{
         "image":"assets/levelObjects/glurdle.png",
-        "size":(35, 35)
+        "descriptor":"Glurdle",
+        "size":(40, 40)
     },
     22:{
         "image":"assets/levelObjects/platUp.png",
-        "size":(35,35)
+        "descriptor":"PlatformUp",
+        "size":(46,46)
     },
     23:{
         "image":"assets/levelObjects/platRight.png",
-        "size":(35,35)
+        "descriptor":"PlatformRight",
+        "size":(46,46)
     }
 }
 
@@ -153,7 +194,8 @@ TRIGGERS = [
     "moveRight",
     "moveUp",
     "moveDown",
-	"destroy"
+	"destroy",
+    "hide"
 ]
 
 BACKGROUNDS = {

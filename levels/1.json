@@ -1,3 +1,5 @@
 {
-    "bg_img": "assets/backgrounds/bg_castle.png"
+    "bg_img": "assets/backgrounds/bg_castle.png",
+    "ground_tile": "assets/levelObjects/grass.png",
+    "editable_objects": {}
 }

@@ -1,10 +1,8 @@
-import pygame, sys
 import math
 import csv
 from gamelib import *
-from classes import Dynamite, Glurdle, PlatformUp, PlatformRight, Key
-pygame.init()
-pygame.mixer.init()
+from classes import Glurdle, PlatformUp, PlatformRight, PlatformDown, PlatformLeft, Key, HealthPotion, Currency
+
 
 screen_width, screen_height = 700, 500
 screen = pygame.display.set_mode((700, 500))
@@ -12,11 +10,12 @@ pygame.display.set_caption("Utopian Quest")
 pygame.display.set_icon(pygame.image.load("game_icon.png"))
 screen_constants = get_usefull_constants(screen)
 running = True
-fps = 30
+fps = 120
 clock = pygame.time.Clock()
 GRAVITY = 0.2
-ROWS = 15
-TILE_SIZE = TILE_SIZE = screen_height // ROWS
+ROWS = 11
+TILE_SIZE = 45
+print(TILE_SIZE)
 bg_scroll = 0
 screen_scroll = 0
 SCROLL_THRESH = 300
@@ -25,43 +24,12 @@ level = load_json_data('workflow.json')["start_level"]
 MAX_LEVELS = 10
 bg_img = load_json_data(f'levels/{level}.json')["bg_img"]
 background = pygame.image.load(bg_img).convert()
-currency_spinning_angle = 0
+editable_objects = load_json_data(f'levels/{level}.json')["editable_objects"]
+# health_potion_img = pygame.transform.scale(pygame.image.load(LEVEL_OBJECTS[20]["image"]), (46, 46))
 
 # define player action variables
 moving_left = False
 moving_right = False
-
-# background music
-pygame.mixer.music.load("assets/music/music.mp3")
-pygame.mixer.music.play(-1)
-
-# fx
-coin_fx = pygame.mixer.Sound('assets/music/coin.mp3')
-coin_fx.set_volume(1)
-
-level_end_fx = pygame.mixer.Sound('assets/music/level_end.wav')
-level_end_fx.set_volume(1)
-
-explosive_fx = pygame.mixer.Sound('assets/music/explosion.wav')
-explosive_fx.set_volume(1)
-
-death_fx = pygame.mixer.Sound('assets/music/death.wav')
-death_fx.set_volume(1)
-
-jump_fx = pygame.mixer.Sound('assets/music/jump.wav')
-jump_fx.set_volume(1)
-
-destroy_fx = pygame.mixer.Sound('assets/music/destroy.wav')
-destroy_fx.set_volume(1)
-
-triggered_fx = pygame.mixer.Sound('assets/music/triggered.wav')
-triggered_fx.set_volume(1)
-
-uptrigger_fx = pygame.mixer.Sound('assets/music/uptrigger.wav')
-uptrigger_fx.set_volume(1)
-
-hurt_fx = pygame.mixer.Sound('assets/music/hurt.wav')
-hurt_fx.set_volume(1)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, x, y, character, scale, speed):
@@ -70,7 +38,8 @@ class Player(pygame.sprite.Sprite):
         self.speed = speed
         self.shoot_cooldown = 0
         self.direction = 1
-        self.hearts = 3
+        self.health = 200
+        self.max_health = 200
         self.vel_y = 0
         self.jump = False
         self.react_to_explosion = False
@@ -204,7 +173,7 @@ class Player(pygame.sprite.Sprite):
                             self.height):
                     explosive_fx.play()
                     self.react_to_explosion = True
-                    self.hearts -= 1
+                    self.health -= 30
                     world.objects_list.remove(tile)
             elif tile[2] == 'Goal':
                 if tile[1].colliderect(
@@ -216,6 +185,9 @@ class Player(pygame.sprite.Sprite):
 
         if pygame.sprite.spritecollide(self, key_group, False):
             level_complete = True
+
+        if self.rect.top < screen_height:
+            pass
 
         for platform in platform_group:
             #check for collision in the x direction
@@ -236,23 +208,28 @@ class Player(pygame.sprite.Sprite):
 
                 if type(platform) == PlatformRight:
                     if dx == 0:
-                        self.rect.x = platform.rect.centerx - platform.deltaX
+                        self.rect.x = (platform.rect.centerx + platform.deltaX)
 
 
         if pygame.sprite.spritecollide(self, glurdle_group, False):
             hurt_fx.play()
             self.vel_y = -7
             self.in_air = True
-            self.hearts -= 1
+            self.health -= 25
             glurdle_group.remove(pygame.sprite.spritecollide(self, glurdle_group, False))
             
         if pygame.sprite.spritecollide(self, currency_group, False):
             coin_fx.play()
             currency_group.remove(pygame.sprite.spritecollide(self, currency_group, False))
 
+        if pygame.sprite.spritecollide(self, health_potion_group, False):
+            health_potion_group.remove(pygame.sprite.spritecollide(self, health_potion_group, False))
+            if self.health < 100:
+                self.health += 15
+
         #check if fallen off the map
         if self.rect.bottom > screen_height:
-            self.hearts = 0
+            self.health = 0
 
         #check if going off the edges of the screen
         if self.rect.left + dx < 0 or self.rect.right + dx > screen_width:
@@ -297,36 +274,20 @@ class Player(pygame.sprite.Sprite):
             self.update_time = pygame.time.get_ticks()
 
     def check_alive(self):
-        if self.hearts <= 0:
+        if self.health <= 0:
             self.health = 0
             self.speed = 0
             self.alive = False
-            self.update_action(3)
+            self.update_action(4)
             pygame.mixer.music.stop()
             death_fx.play()
             pygame.time.delay(5000)
             pygame.mixer.music.play(-1)
 
     def draw(self):
-        screen.blit(pygame.transform.flip(self.image, self.flip, False),
+        screen.blit(pygame.transform.flip(self.image, False, False),
                     self.rect)
 
-class Currency(pygame.sprite.Sprite):
-    def __init__(self, x, y, img):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(img)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
-    def update(self):
-        self.rect.x += screen_scroll
-        new_width = round(math.sin(math.radians(currency_spinning_angle)) * self.rect.width)
-        rot_currency = self.image if new_width >= 0 else pygame.transform.flip(
-            self.image, True, False)
-        rot_currency = pygame.transform.scale(
-            rot_currency, (abs(new_width), self.rect.height))
-        screen.blit(rot_currency, rot_currency.get_rect(center=(self.rect.topleft[0] + (self.rect.width/4), self.rect.topleft[1])))
 
 # store tiles in list
 img_list = []
@@ -336,11 +297,11 @@ for x in list(LEVEL_OBJECTS.keys()):
     img_list.append(img)
 
 # sprite groups
-dynamite_group = pygame.sprite.Group()
 glurdle_group = pygame.sprite.Group()
 currency_group = pygame.sprite.Group()
 platform_group = pygame.sprite.Group()
 key_group = pygame.sprite.Group()
+health_potion_group  = pygame.sprite.Group()
 
 def draw_bg(screen, background):
     screen.fill((255, 255, 255))
@@ -358,7 +319,7 @@ class World():
         self.level_length = len(data[0])
         for y, row in enumerate(data):
             for x, tile in enumerate(row):
-                if tile >= 0 and tile < 20 and tile != 8 and tile != 9 and tile != 12:
+                if tile >= 0 and tile < 20 and tile != 8 and tile != 9 and tile != 12 and tile != 4 and tile != 5:
                     img = pygame.transform.scale(
                         pygame.image.load(LEVEL_OBJECTS[tile]["image"]),
                         LEVEL_OBJECTS[tile]["size"])
@@ -369,6 +330,16 @@ class World():
                         img, img_rect, LEVEL_OBJECTS[tile]["descriptor"]
                 	]
                     self.objects_list.append(tile_data)
+                elif tile == 4:
+                    for idx, obj in editable_objects.items():
+                        if obj["descriptor"] == "PlatformDown" and (obj["pos"][0], obj["pos"][1]) == (x * TILE_SIZE, y * TILE_SIZE):
+                            platform = PlatformDown(x * TILE_SIZE, y * TILE_SIZE, obj["speed"], obj["duration_factor"])
+                            platform_group.add(platform)
+                elif tile == 5:
+                    for idx, obj in editable_objects.items():
+                        if obj["descriptor"] == "PlatformLeft" and (obj["pos"][0], obj["pos"][1]) == (x * TILE_SIZE, y * TILE_SIZE):
+                            platform = PlatformLeft(x * TILE_SIZE, y * TILE_SIZE, obj["speed"], obj["duration_factor"])
+                            platform_group.add(platform)
                 elif tile == 12:
                     key = Key(x * TILE_SIZE, y * TILE_SIZE)
                     key_group.add(key)
@@ -376,17 +347,23 @@ class World():
                     currency = Currency(x * TILE_SIZE, y * TILE_SIZE, LEVEL_OBJECTS[tile]["image"])
                     currency_group.add(currency)
                 elif tile == 20:
-                    dynamite = Dynamite(x * TILE_SIZE, y * TILE_SIZE)
-                    dynamite_group.add(dynamite)
+                    health_potion = HealthPotion(x * TILE_SIZE, y * TILE_SIZE)
+                    health_potion_group.add(health_potion)
                 elif tile == 21:
-                    glurdle = Glurdle(x * TILE_SIZE, y * TILE_SIZE)
-                    glurdle_group.add(glurdle)
+                    for idx, obj in editable_objects.items():
+                        if obj["descriptor"] == "Glurdle" and (obj["pos"][0], obj["pos"][1]) == (x * TILE_SIZE, y * TILE_SIZE):
+                            glurdle = Glurdle(x * TILE_SIZE, y * TILE_SIZE, obj["speed"], obj["duration_factor"])
+                            glurdle_group.add(glurdle)
                 elif tile == 22:
-                    platform = PlatformUp(x * TILE_SIZE, y * TILE_SIZE)
-                    platform_group.add(platform)
+                    for idx, obj in editable_objects.items():
+                        if obj["descriptor"] == "PlatformUp" and (obj["pos"][0], obj["pos"][1]) == (x * TILE_SIZE, y * TILE_SIZE):
+                            platform = PlatformUp(x * TILE_SIZE, y * TILE_SIZE, obj["speed"], obj["duration_factor"])
+                            platform_group.add(platform)
                 elif tile == 23:
-                    platform = PlatformRight(x * TILE_SIZE, y * TILE_SIZE)
-                    platform_group.add(platform)
+                    for idx, obj in editable_objects.items():
+                        if obj["descriptor"] == "PlatformRight" and (obj["pos"][0], obj["pos"][1]) == (x * TILE_SIZE, y * TILE_SIZE):
+                            platform = PlatformRight(x * TILE_SIZE, y * TILE_SIZE, obj["speed"], obj["duration_factor"])
+                            platform_group.add(platform)
                     
         for y, row in enumerate(trigger_data):
             for x, trigger in enumerate(row):
@@ -423,10 +400,11 @@ with open(f'levels/{level}-triggers.csv', newline='') as csvfile:
 
 world = World()
 world.process_data(world_data, trigger_data)
-player = Player(screen, 30, 0, "Boro", 1, 5)
+player = Player(screen, 50, 0, "Boro", 1, 5)
 
 while running:
     clock.tick(fps)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -458,10 +436,8 @@ while running:
             pass
 
     # draw game every frame.
-    currency_spinning_angle += 5
     draw_bg(screen, background)
     world.draw()
-    dynamite_group.draw(screen)
     platform_group.draw(screen)
     key_group.draw(screen)
     glurdle_group.draw(screen)
@@ -469,19 +445,28 @@ while running:
     player.draw()
     draw_text(screen, FONTS['game_info'], "LEVEL: " + str(level), 30,
               (0, 0, 0), (75, screen_constants['margin_y'] - 30))
-    try:
-        for x in range(player.hearts):
-            img = pygame.transform.smoothscale(
-                pygame.image.load("assets/images/heart.png"), (30, 30))
-            screen.blit(img, (x * 30 + 600, 5))
-    except:
-        pass
+    
+    draw_text(screen, FONTS['game_info'], "FPS: " + str(round(clock.get_fps())), 30,
+              (0, 0, 0), (625, screen_constants['margin_y'] - 30))
+
+    if player.health > 130 and player.health < 160:
+        health_color = (255, 255, 0)
+    elif player.health > 160:
+        health_color = (0, 255, 0)
+    elif player.health < 100:
+        health_color = (255, 0, 0)
+    elif player.health == 0:
+        health_color = None
+    if health_color != None:
+        health_rect = pygame.Rect(10, screen_constants['margin_y'] - 10, player.health, 30)
+        pygame.draw.rect(screen, health_color, health_rect)
+    pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(10, screen_constants['margin_y'] - 10, player.max_health, 30), width=3, border_radius=5)
     if player.alive:
-        platform_group.update(screen_scroll)
-        dynamite_group.update(1)
+        platform_group.update(screen_scroll)         
         key_group.update(screen_scroll)
-        glurdle_group.update(screen_scroll, world, GRAVITY)
-        currency_group.update()
+        health_potion_group.update(screen_scroll)
+        glurdle_group.update(screen_scroll, world)
+        currency_group.update(screen, screen_scroll)
         if player.in_air:
             player.update_action(2)  #2: jump
         elif moving_left or moving_right:
@@ -499,9 +484,9 @@ while running:
             bg_scroll = 0
             world_data = []
             key_group.empty()
+            health_potion_group.empty()
             platform_group.empty()
             currency_group.empty()
-            dynamite_group.empty()
             glurdle_group.empty()
             for row in range(ROWS):
                 r = [-1] * COLS
@@ -514,6 +499,7 @@ while running:
             #load in level data and create world
             bg_img = load_json_data(f'levels/{level}.json')["bg_img"]
             background = pygame.image.load(bg_img).convert()
+            editable_objects = load_json_data(f'levels/{level}.json')["editable_objects"]
             with open(f'levels/{level}.csv', newline='') as csvfile:
                 reader = csv.reader(csvfile, delimiter=',')
                 for x, row in enumerate(reader):
@@ -526,13 +512,13 @@ while running:
                         trigger_data[x][y] = int(trigger)
             world = World()
             world.process_data(world_data, trigger_data)
-            player = Player(screen, 30, 0, "Boro", 0.7, 5)
+            player = Player(screen, 50, 0, "Boro", 1, 5)
     else:
         bg_scroll = 0
         world_data = []
         platform_group.empty()
         key_group.empty()
-        dynamite_group.empty()
+        health_potion_group.empty()
         glurdle_group.empty()
         currency_group.empty()
         for row in range(ROWS):
@@ -546,6 +532,7 @@ while running:
         #load in level data and create world
         bg_img = load_json_data(f'levels/{level}.json')["bg_img"]
         background = pygame.image.load(bg_img).convert()
+        editable_objects = load_json_data(f'levels/{level}.json')["editable_objects"]
         with open(f'levels/{level}.csv', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for x, row in enumerate(reader):
@@ -558,7 +545,7 @@ while running:
                     trigger_data[x][y] = int(trigger)
         world = World()
         world.process_data(world_data, trigger_data)
-        player = Player(screen, 30, 0, "Boro", 0.7, 5)
+        player = Player(screen, 50, 0, "Boro", 1, 5)
         
 
     pygame.display.update()

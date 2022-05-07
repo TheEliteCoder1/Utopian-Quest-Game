@@ -1,3 +1,87 @@
 {
-    "bg_img": "assets/backgrounds/bg_grasslands.png"
+    "bg_img": "assets/backgrounds/bg_grasslands.png",
+    "ground_tile": "assets/levelObjects/grass.png",
+    "editable_objects": {
+        "10": {
+            "descriptor": "Glurdle",
+            "pos": [
+                900,
+                405
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "11": {
+            "descriptor": "Glurdle",
+            "pos": [
+                360,
+                405
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "12": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1305,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "13": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1215,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "14": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1125,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "15": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1170,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "16": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1260,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "17": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1350,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "18": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1395,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        }
+    }
 }
