@@ -3,7 +3,6 @@ import csv
 from gamelib import *
 from classes import Glurdle, PlatformUp, PlatformRight, PlatformDown, PlatformLeft, Key, HealthPotion, Currency
 
-
 screen_width, screen_height = 700, 500
 screen = pygame.display.set_mode((700, 500))
 pygame.display.set_caption("Utopian Quest")
@@ -15,7 +14,6 @@ clock = pygame.time.Clock()
 GRAVITY = 0.2
 ROWS = 11
 TILE_SIZE = 45
-print(TILE_SIZE)
 bg_scroll = 0
 screen_scroll = 0
 SCROLL_THRESH = 300
@@ -76,7 +74,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (x, y)
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        
+        self.below_moving = False
+
         for tile in world.objects_list:
             for trigger in world.triggers:
                 if (tile[1][0], tile[1][1]) == (trigger[0], trigger[1]):
@@ -190,26 +189,38 @@ class Player(pygame.sprite.Sprite):
             pass
 
         for platform in platform_group:
-            #check for collision in the x direction
-            if platform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
-                dx = 0
-            #check for collision in the y direction
-            if platform.rect.colliderect(self.rect.x, self.rect.y + dy,
-                                   self.width, self.height):
-                #check if below the ground, i.e. jumping
-                if self.vel_y < 0:
-                    self.vel_y = 0
-                    dy = platform.rect.bottom - self.rect.top
-                #check if above the ground, i.e. falling
-                elif self.vel_y >= 0:
-                    self.vel_y = 0
-                    self.in_air = False
-                    dy = platform.rect.top - self.rect.bottom
+            if platform.deltaY == 0:
+                if platform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+                    self.below_moving = False
+                    dx = 0
+                if platform.rect.colliderect(self.rect.x + dx, self.rect.y + dy, self.width, self.height):
+                    if self.below_moving == False:
+                        dx = platform.deltaX
+                if platform.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+                    # if on top 
+                    if platform.rect.top > self.rect.bottom:
+                        self.below_moving = False
+                        self.vel_y = 0
+                        self.in_air = False
+                    elif self.rect.top >= platform.rect.bottom:
+                        self.below_moving = True
+                        self.vel_y = 0
 
-                if type(platform) == PlatformRight:
-                    if dx == 0:
-                        self.rect.x = (platform.rect.centerx + platform.deltaX)
-
+            else:
+                if platform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
+                    dx = 0
+                    #check for collision in the y direction
+                    if platform.rect.colliderect(self.rect.x, self.rect.y + dy, self.width, self.height):
+                        #check if below the ground, i.e. jumping
+                        if self.vel_y < 0 and platform.rect.top > self.rect.bottom:
+                            self.vel_y = 0
+                            dy = platform.rect.bottom - self.rect.top
+                        #check if above the ground, i.e. falling
+                        elif self.vel_y >= 0 and platform.rect.top < self.rect.bottom:
+                            self.vel_y = 0
+                            self.in_air = False
+                            dy = platform.rect.top - self.rect.bottom
+                        
 
         if pygame.sprite.spritecollide(self, glurdle_group, False):
             hurt_fx.play()

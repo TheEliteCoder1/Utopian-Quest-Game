@@ -102,27 +102,27 @@ edit_menu.add.button("Save", save_changes, button_id='Savebtn')
 def edit_menu_render(obj_descriptor: str, key: str):
     if obj_descriptor == "PlatformUp":
             editor_data["obj_idx"] = key
-            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor}')
+            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor} | ID: {key}')
             edit_menu.get_widget('Speed').set_value(obj["speed"])
             edit_menu.get_widget('Duration Factor').set_value(obj["duration_factor"])
     elif obj_descriptor == "PlatformRight":
             editor_data["obj_idx"] = key
-            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor}')
+            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor} | ID: {key}')
             edit_menu.get_widget('Speed').set_value(obj["speed"])
             edit_menu.get_widget('Duration Factor').set_value(obj["duration_factor"])
     elif obj_descriptor == "PlatformLeft":
             editor_data["obj_idx"] = key
-            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor}')
+            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor} | ID: {key}')
             edit_menu.get_widget('Speed').set_value(obj["speed"])
             edit_menu.get_widget('Duration Factor').set_value(obj["duration_factor"])
     elif obj_descriptor == "PlatformDown":
             editor_data["obj_idx"] = key
-            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor}')
+            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor} | ID: {key}')
             edit_menu.get_widget('Speed').set_value(obj["speed"])
             edit_menu.get_widget('Duration Factor').set_value(obj["duration_factor"])
     elif obj_descriptor == "Glurdle":
             editor_data["obj_idx"] = key
-            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor}')
+            edit_menu.get_widget('descriptor').set_title(f'OBJ: {obj_descriptor} | ID: {key}')
             edit_menu.get_widget('Speed').set_value(obj["speed"])
             edit_menu.get_widget('Duration Factor').set_value(obj["duration_factor"])
     
@@ -373,7 +373,7 @@ while running:
             draw_text(*i['num'])
         # highlight the selected trigger
         try:
-            pygame.draw.circle(screen, (255,0,0), (trigger_list[selected_trigger]["rect"].x + (TILE_SIZE/2), trigger_list[selected_trigger]["rect"].y + 21), radius=20, width=2)
+            pygame.draw.circle(screen, (255,0,0), (trigger_list[selected_trigger]["rect"].x + (TILE_SIZE/2), trigger_list[selected_trigger]["rect"].y + 22), radius=20, width=2)
         except:
             selected_trigger = 0
 
