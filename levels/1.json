@@ -1,5 +1,186 @@
 {
     "bg_img": "assets/backgrounds/bg_castle.png",
     "ground_tile": "assets/levelObjects/grass.png",
-    "editable_objects": {}
+    "editable_objects": {
+        "10": {
+            "descriptor": "Glurdle",
+            "pos": [
+                900,
+                405
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "11": {
+            "descriptor": "Glurdle",
+            "pos": [
+                360,
+                405
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "14": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1125,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "15": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1170,
+                270
+            ],
+            "speed": 2,
+            "duration_factor": 100
+        },
+        "23": {
+            "descriptor": "Glurdle",
+            "pos": [
+                990,
+                135
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "24": {
+            "descriptor": "Glurdle",
+            "pos": [
+                945,
+                135
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "25": {
+            "descriptor": "Glurdle",
+            "pos": [
+                900,
+                135
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "26": {
+            "descriptor": "Glurdle",
+            "pos": [
+                855,
+                180
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "27": {
+            "descriptor": "Glurdle",
+            "pos": [
+                810,
+                180
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "28": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1485,
+                180
+            ],
+            "speed": 4,
+            "duration_factor": 45
+        },
+        "29": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1530,
+                225
+            ],
+            "speed": 4,
+            "duration_factor": 45
+        },
+        "30": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1575,
+                270
+            ],
+            "speed": 4,
+            "duration_factor": 45
+        },
+        "31": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1620,
+                270
+            ],
+            "speed": 4,
+            "duration_factor": 45
+        },
+        "32": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1665,
+                315
+            ],
+            "speed": 4,
+            "duration_factor": 45
+        },
+        "33": {
+            "descriptor": "PlatformRight",
+            "pos": [
+                135,
+                135
+            ],
+            "speed": 4,
+            "duration_factor": 10
+        },
+        "34": {
+            "descriptor": "PlatformRight",
+            "pos": [
+                180,
+                135
+            ],
+            "speed": 4,
+            "duration_factor": 10
+        },
+        "36": {
+            "descriptor": "PlatformLeft",
+            "pos": [
+                405,
+                180
+            ],
+            "speed": 4,
+            "duration_factor": 5
+        },
+        "37": {
+            "descriptor": "PlatformLeft",
+            "pos": [
+                360,
+                180
+            ],
+            "speed": 4,
+            "duration_factor": 5
+        },
+        "38": {
+            "descriptor": "PlatformUp",
+            "pos": [
+                495,
+                135
+            ],
+            "speed": 7,
+            "duration_factor": 7
+        },
+        "39": {
+            "descriptor": "PlatformDown",
+            "pos": [
+                585,
+                180
+            ],
+            "speed": 7,
+            "duration_factor": 7
+        }
+    }
 }

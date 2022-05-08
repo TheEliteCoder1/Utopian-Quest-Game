@@ -12,11 +12,12 @@ running = True
 fps = 120
 clock = pygame.time.Clock()
 GRAVITY = 0.2
-ROWS = 11
+ROWS = 100
 TILE_SIZE = 45
 bg_scroll = 0
 screen_scroll = 0
-SCROLL_THRESH = 300
+screen_scroll_y = 0
+SCROLL_THRESH = 200
 COLS = 200
 level = load_json_data('workflow.json')["start_level"]
 MAX_LEVELS = 10
@@ -87,7 +88,9 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, moving_left, moving_right):
         #reset movement variables
+        global SCROLL_THRESH
         screen_scroll = 0
+        screen_scroll_y = 0
         dx = 0
         dy = 0
 
@@ -185,9 +188,6 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, key_group, False):
             level_complete = True
 
-        if self.rect.top < screen_height:
-            pass
-
         for platform in platform_group:
             if platform.deltaY == 0:
                 if platform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
@@ -205,7 +205,6 @@ class Player(pygame.sprite.Sprite):
                     elif self.rect.top >= platform.rect.bottom:
                         self.below_moving = True
                         self.vel_y = 0
-
             else:
                 if platform.rect.colliderect(self.rect.x + dx, self.rect.y, self.width, self.height):
                     dx = 0
@@ -239,7 +238,7 @@ class Player(pygame.sprite.Sprite):
                 self.health += 15
 
         #check if fallen off the map
-        if self.rect.bottom > screen_height:
+        if self.rect.bottom > (ROWS * TILE_SIZE) - screen_height:
             self.health = 0
 
         #check if going off the edges of the screen
@@ -256,9 +255,17 @@ class Player(pygame.sprite.Sprite):
          or (self.rect.left < SCROLL_THRESH and bg_scroll > abs(dx)):
             self.rect.x -= dx
             screen_scroll = -dx
-		
 
-        return screen_scroll, level_complete
+        if (self.vel_y < 0 and self.rect.top < SCROLL_THRESH) or (self.rect.bottom > (screen_height - SCROLL_THRESH)):
+            self.rect.y -= dy
+            screen_scroll_y = -dy
+
+        for platform in platform_group:
+            if (platform.rect.top < SCROLL_THRESH) or (platform.rect.bottom > (screen_height - SCROLL_THRESH)) and platform.rect.colliderect(player.rect):
+                print("UP")
+
+
+        return screen_scroll, screen_scroll_y, level_complete
 
     def update_animation(self):
         #update animation
@@ -385,6 +392,7 @@ class World():
     def draw(self):
         for tile in self.objects_list:
             tile[1][0] += screen_scroll
+            tile[1][1] += screen_scroll_y
             screen.blit(tile[0], tile[1])
 
 #create empty tile list
@@ -473,18 +481,18 @@ while running:
         pygame.draw.rect(screen, health_color, health_rect)
     pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(10, screen_constants['margin_y'] - 10, player.max_health, 30), width=3, border_radius=5)
     if player.alive:
-        platform_group.update(screen_scroll)         
-        key_group.update(screen_scroll)
-        health_potion_group.update(screen_scroll)
-        glurdle_group.update(screen_scroll, world)
-        currency_group.update(screen, screen_scroll)
+        platform_group.update(screen_scroll, screen_scroll_y)         
+        key_group.update(screen_scroll, screen_scroll_y)
+        health_potion_group.update(screen_scroll, screen_scroll_y)
+        glurdle_group.update(screen_scroll, screen_scroll_y, world)
+        currency_group.update(screen, screen_scroll, screen_scroll_y)
         if player.in_air:
             player.update_action(2)  #2: jump
         elif moving_left or moving_right:
             player.update_action(1)  #1: run
         else:
             player.update_action(0)  #0: idle
-        screen_scroll, level_complete = player.move(moving_left, moving_right)
+        screen_scroll, screen_scroll_y, level_complete = player.move(moving_left, moving_right)
         bg_scroll -= screen_scroll
         if level_complete:
             pygame.mixer.music.stop()

@@ -28,7 +28,7 @@ clock = pygame.time.Clock()
 
 # define editor variables
 level = 0
-ROWS = 11
+ROWS = 100
 MAX_COLS = 200
 TILE_SIZE = 45
 current_tile = 0
@@ -36,8 +36,12 @@ current_background = 0
 current_ground = 0
 scroll_left = False
 scroll_right = False
+scroll_up = False
+scroll_down = False
 scroll = 0
+y_scroll = (ROWS * TILE_SIZE) - screen_height
 scroll_speed = 1
+editable_objects = {}
 
 # create empty tile list
 world_data = []
@@ -148,7 +152,7 @@ def draw_world():
         for x, tile in enumerate(row):
             if tile >= 0:
                 screen.blit(img_list[tile],
-                            (x * TILE_SIZE - scroll, y * TILE_SIZE))
+                            (x * TILE_SIZE - scroll, y * TILE_SIZE - y_scroll))
 
 # create empty trigger list
 trigger_data = []
@@ -163,7 +167,7 @@ def draw_trigger_list():
         for x, trigger in enumerate(row):
             if trigger >= 0:
                 re = pygame.draw.circle(
-                    screen, (0, 0, 0), (x * TILE_SIZE - scroll, y * TILE_SIZE),
+                    screen, (0, 0, 0), (x * TILE_SIZE - scroll, y * TILE_SIZE - y_scroll),
                     0)
                 pygame.draw.circle(
                     screen, (0, 0, 0),
@@ -250,6 +254,7 @@ def save_data():
     save_json_data(f'levels/{level}.json', {"bg_img":bg_img, "ground_tile":ground_tile, "editable_objects":editable_objects})
 
 
+
 while running:
     clock.tick(fps)
 
@@ -284,6 +289,7 @@ while running:
         #load in level data
         #reset scroll back to the start of the level 
         scroll = 0
+        y_scroll = (ROWS * TILE_SIZE) - screen_height
         with open(f'levels/{level}.csv', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for x, row in enumerate(reader):
@@ -382,11 +388,15 @@ while running:
         scroll -= 5 * scroll_speed
     if scroll_right == True and scroll < (MAX_COLS * TILE_SIZE) - screen_width:
         scroll += 5 * scroll_speed
+    if scroll_up == True and y_scroll > 0:
+       y_scroll -= 5 * scroll_speed 
+    if scroll_down == True and y_scroll < (ROWS * TILE_SIZE) - screen_height:
+       y_scroll += 5 * scroll_speed 
     # add new tiles to screen
     # get mouse position
     mpos = pygame.mouse.get_pos()
     x = (mpos[0] + scroll) // TILE_SIZE
-    y = mpos[1] // TILE_SIZE
+    y = (mpos[1] + y_scroll) // TILE_SIZE
     if side_panel_tab == 'Tiles':
         # check that the coordinates are within the tile area
         if mpos[0] < screen_width and mpos[1] < screen_height:
@@ -519,9 +529,9 @@ while running:
                     scroll_left = True
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     scroll_right = True
-                if event.key == pygame.K_UP or event.key == pygame.K_w:
+                if event.key == pygame.K_q:
                     scroll_up = True
-                if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                if event.key == pygame.K_e:
                     scroll_down = True
                 if event.key == pygame.K_RSHIFT:
                     scroll_speed = 5
@@ -559,6 +569,10 @@ while running:
                 scroll_left = False
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 scroll_right = False
+            if event.key == pygame.K_q:
+                scroll_up = False
+            if event.key == pygame.K_e:
+                scroll_down = False
             if event.key == pygame.K_RSHIFT:
                 scroll_speed = 1
 

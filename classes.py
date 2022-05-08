@@ -13,8 +13,8 @@ class HealthPotion(pygame.sprite.Sprite):
         self.move_counter = 0
         self.deltaX, self.deltaY = 0, 0
 
-    def update(self, screen_scroll):
-        self.deltaY = (self.move_direction)
+    def update(self, screen_scroll, screen_scroll_y):
+        self.deltaY = (self.move_direction) + screen_scroll_y
         self.rect.y += self.deltaY
         self.rect.x += screen_scroll
         self.move_counter += 0.9
@@ -31,9 +31,10 @@ class Currency(pygame.sprite.Sprite):
         self.rect.y = y
         self.currency_spinning_angle = 0
 
-    def update(self, screen, screen_scroll):
+    def update(self, screen, screen_scroll, screen_scroll_y):
         self.currency_spinning_angle += 5
         self.rect.x += screen_scroll
+        self.rect.y += screen_scroll_y
         new_width = round(math.sin(math.radians(self.currency_spinning_angle)) * self.rect.width)
         rot_currency = self.image if new_width >= 0 else pygame.transform.flip(
             self.image, True, False)
@@ -56,10 +57,10 @@ class Glurdle(pygame.sprite.Sprite):
         self.deltaX, self.deltaY = 0, 0
         self.vel_y = 0
 
-    def update(self, screen_scroll, world):
+    def update(self, screen_scroll, screen_scroll_y, world):
         self.deltaX = ((self.move_direction)*self.speed) + screen_scroll
         self.rect.x += self.deltaX
-        self.rect.y += self.deltaY
+        self.rect.y += self.deltaY + (screen_scroll_y)
         self.move_counter += 1
         if abs(self.move_counter) > self.duration_factor:
             self.move_direction *= -1
@@ -105,9 +106,10 @@ class PlatformRight(pygame.sprite.Sprite):
         self.duration_factor = duration_factor
         self.deltaX, self.deltaY = 0, 0
 
-    def update(self, screen_scroll):
+    def update(self, screen_scroll, screen_scroll_y):
         self.deltaX = ((self.move_direction)*self.speed) + screen_scroll
         self.rect.x += self.deltaX
+        self.rect.y += self.deltaY + screen_scroll_y
         self.move_counter += 1
         if abs(self.move_counter) > self.duration_factor:
             self.move_direction *= -1
@@ -126,9 +128,10 @@ class PlatformLeft(pygame.sprite.Sprite):
         self.duration_factor = duration_factor
         self.deltaX, self.deltaY = 0, 0
 
-    def update(self, screen_scroll):
+    def update(self, screen_scroll, screen_scroll_y):
         self.deltaX = -((self.move_direction)*self.speed) + screen_scroll
         self.rect.x += self.deltaX
+        self.rect.y += self.deltaY + screen_scroll_y
         self.move_counter += 1
         if abs(self.move_counter) > self.duration_factor:
             self.move_direction *= -1
@@ -147,9 +150,9 @@ class PlatformDown(pygame.sprite.Sprite):
         self.duration_factor = duration_factor
         self.deltaX, self.deltaY = 0, 0
 
-    def update(self, screen_scroll):
+    def update(self, screen_scroll, screen_scroll_y):
         self.deltaY = (self.move_direction)*self.speed
-        self.rect.y -= self.deltaY
+        self.rect.y -= self.deltaY + screen_scroll_y
         self.rect.x += screen_scroll
         self.move_counter += 1
         if abs(self.move_counter) > self.duration_factor:
@@ -169,9 +172,9 @@ class PlatformUp(pygame.sprite.Sprite):
         self.duration_factor = duration_factor
         self.deltaX, self.deltaY = 0, 0
 
-    def update(self, screen_scroll):
+    def update(self, screen_scroll, screen_scroll_y):
         self.deltaY = (self.move_direction)*self.speed
-        self.rect.y += self.deltaY
+        self.rect.y += self.deltaY + screen_scroll_y
         self.rect.x += screen_scroll
         self.move_counter += 1
         if abs(self.move_counter) > self.duration_factor:
@@ -189,9 +192,9 @@ class Key(pygame.sprite.Sprite):
         self.move_counter = 0
         self.deltaX, self.deltaY = 0, 0
 
-    def update(self, screen_scroll):
+    def update(self, screen_scroll, screen_scroll_y):
         self.deltaY = (self.move_direction)
-        self.rect.y += self.deltaY
+        self.rect.y += self.deltaY + screen_scroll_y
         self.rect.x += screen_scroll
         self.move_counter += 0.9
         if abs(self.move_counter) > 5:
