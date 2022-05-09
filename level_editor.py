@@ -529,9 +529,9 @@ while running:
                     scroll_left = True
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     scroll_right = True
-                if event.key == pygame.K_q:
+                if event.key == pygame.K_w:
                     scroll_up = True
-                if event.key == pygame.K_e:
+                if event.key == pygame.K_s:
                     scroll_down = True
                 if event.key == pygame.K_RSHIFT:
                     scroll_speed = 5
@@ -549,10 +549,11 @@ while running:
                 level += 1
             if event.key == pygame.K_DOWN and level > 0:
                 level -= 1
-            if event.key == pygame.K_w and selected_trigger > 0:
-                selected_trigger -= 1
-            if event.key == pygame.K_s and selected_trigger < len(TRIGGERS):
-                selected_trigger += 1
+            if side_panel_tab == "Triggers":
+                if event.key == pygame.K_w and selected_trigger > 0:
+                    selected_trigger -= 1
+                if event.key == pygame.K_s and selected_trigger < len(TRIGGERS):
+                    selected_trigger += 1
             if event.key == pygame.K_t and pygame.key.get_mods() & pygame.KMOD_CTRL:
                 try:
                     save_json_data("workflow.json", {"start_level":level})
@@ -569,9 +570,9 @@ while running:
                 scroll_left = False
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 scroll_right = False
-            if event.key == pygame.K_q:
+            if event.key == pygame.K_w:
                 scroll_up = False
-            if event.key == pygame.K_e:
+            if event.key == pygame.K_s:
                 scroll_down = False
             if event.key == pygame.K_RSHIFT:
                 scroll_speed = 1

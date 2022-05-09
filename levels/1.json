@@ -1,186 +1,312 @@
 {
-    "bg_img": "assets/backgrounds/bg_castle.png",
+    "bg_img": "assets/backgrounds/bg_grasslands.png",
     "ground_tile": "assets/levelObjects/grass.png",
     "editable_objects": {
-        "10": {
+        "40": {
             "descriptor": "Glurdle",
             "pos": [
                 900,
-                405
-            ],
-            "speed": 2,
-            "duration_factor": 100
-        },
-        "11": {
-            "descriptor": "Glurdle",
-            "pos": [
-                360,
-                405
+                675
             ],
             "speed": 4,
             "duration_factor": 100
         },
-        "14": {
+        "41": {
             "descriptor": "Glurdle",
             "pos": [
-                1125,
-                270
+                765,
+                585
             ],
-            "speed": 2,
+            "speed": 4,
             "duration_factor": 100
         },
-        "15": {
+        "42": {
+            "descriptor": "Glurdle",
+            "pos": [
+                1080,
+                810
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "43": {
             "descriptor": "Glurdle",
             "pos": [
                 1170,
-                270
-            ],
-            "speed": 2,
-            "duration_factor": 100
-        },
-        "23": {
-            "descriptor": "Glurdle",
-            "pos": [
-                990,
-                135
+                900
             ],
             "speed": 4,
             "duration_factor": 100
         },
-        "24": {
+        "44": {
             "descriptor": "Glurdle",
             "pos": [
-                945,
-                135
+                1215,
+                900
             ],
             "speed": 4,
             "duration_factor": 100
         },
-        "25": {
+        "100": {
             "descriptor": "Glurdle",
             "pos": [
-                900,
-                135
+                1260,
+                900
             ],
             "speed": 4,
             "duration_factor": 100
         },
-        "26": {
+        "46": {
             "descriptor": "Glurdle",
             "pos": [
-                855,
-                180
+                1935,
+                1350
             ],
             "speed": 4,
             "duration_factor": 100
         },
-        "27": {
+        "47": {
             "descriptor": "Glurdle",
             "pos": [
-                810,
-                180
+                1890,
+                1350
             ],
             "speed": 4,
             "duration_factor": 100
         },
-        "28": {
+        "48": {
             "descriptor": "Glurdle",
             "pos": [
-                1485,
-                180
+                18100,
+                1305
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "49": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2070,
+                1530
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "50": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2025,
+                1440
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "51": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2115,
+                1620
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "52": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2160,
+                1665
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "53": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2205,
+                1665
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "55": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2655,
+                2070
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "56": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2700,
+                2115
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "57": {
+            "descriptor": "Glurdle",
+            "pos": [
+                2925,
+                2385
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "58": {
+            "descriptor": "Glurdle",
+            "pos": [
+                3105,
+                2520
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "59": {
+            "descriptor": "Glurdle",
+            "pos": [
+                3195,
+                2610
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "60": {
+            "descriptor": "Glurdle",
+            "pos": [
+                3285,
+                2700
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "61": {
+            "descriptor": "Glurdle",
+            "pos": [
+                3465,
+                2880
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "62": {
+            "descriptor": "Glurdle",
+            "pos": [
+                3510,
+                2925
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "63": {
+            "descriptor": "Glurdle",
+            "pos": [
+                3555,
+                2970
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "64": {
+            "descriptor": "Glurdle",
+            "pos": [
+                3600,
+                3015
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "65": {
+            "descriptor": "Glurdle",
+            "pos": [
+                36100,
+                3060
+            ],
+            "speed": 4,
+            "duration_factor": 100
+        },
+        "66": {
+            "descriptor": "Glurdle",
+            "pos": [
+                4365,
+                3825
             ],
             "speed": 4,
             "duration_factor": 45
         },
-        "29": {
+        "67": {
             "descriptor": "Glurdle",
             "pos": [
-                1530,
-                225
+                4410,
+                3870
             ],
             "speed": 4,
             "duration_factor": 45
         },
-        "30": {
+        "68": {
             "descriptor": "Glurdle",
             "pos": [
-                1575,
-                270
+                4455,
+                3915
             ],
             "speed": 4,
             "duration_factor": 45
         },
-        "31": {
+        "69": {
             "descriptor": "Glurdle",
             "pos": [
-                1620,
-                270
+                4500,
+                3960
             ],
             "speed": 4,
             "duration_factor": 45
         },
-        "32": {
+        "70": {
             "descriptor": "Glurdle",
             "pos": [
-                1665,
-                315
+                4545,
+                4005
             ],
             "speed": 4,
             "duration_factor": 45
         },
-        "33": {
-            "descriptor": "PlatformRight",
+        "71": {
+            "descriptor": "Glurdle",
             "pos": [
-                135,
-                135
+                4590,
+                4050
             ],
             "speed": 4,
-            "duration_factor": 10
+            "duration_factor": 45
         },
-        "34": {
-            "descriptor": "PlatformRight",
+        "72": {
+            "descriptor": "Glurdle",
             "pos": [
-                180,
-                135
+                7605,
+                4320
             ],
             "speed": 4,
-            "duration_factor": 10
+            "duration_factor": 45
         },
-        "36": {
-            "descriptor": "PlatformLeft",
+        "73": {
+            "descriptor": "Glurdle",
             "pos": [
-                405,
-                180
+                7875,
+                4140
             ],
             "speed": 4,
-            "duration_factor": 5
+            "duration_factor": 45
         },
-        "37": {
-            "descriptor": "PlatformLeft",
+        "74": {
+            "descriptor": "Glurdle",
             "pos": [
-                360,
-                180
+                8280,
+                4095
             ],
             "speed": 4,
-            "duration_factor": 5
-        },
-        "38": {
-            "descriptor": "PlatformUp",
-            "pos": [
-                495,
-                135
-            ],
-            "speed": 7,
-            "duration_factor": 7
-        },
-        "39": {
-            "descriptor": "PlatformDown",
-            "pos": [
-                585,
-                180
-            ],
-            "speed": 7,
-            "duration_factor": 7
+            "duration_factor": 45
         }
     }
 }

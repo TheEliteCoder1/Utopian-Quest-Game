@@ -17,7 +17,8 @@ TILE_SIZE = 45
 bg_scroll = 0
 screen_scroll = 0
 screen_scroll_y = 0
-SCROLL_THRESH = 200
+SCROLL_THRESH = 300
+SCROLL_THRESH_Y = 92
 COLS = 200
 level = load_json_data('workflow.json')["start_level"]
 MAX_LEVELS = 10
@@ -29,6 +30,39 @@ editable_objects = load_json_data(f'levels/{level}.json')["editable_objects"]
 # define player action variables
 moving_left = False
 moving_right = False
+
+# background music
+music = pygame.mixer.music.load("assets/music/music.mp3")
+pygame.mixer.music.play(-1)
+
+# fx
+coin_fx = pygame.mixer.Sound('assets/music/coin.mp3')
+coin_fx.set_volume(1)
+
+level_end_fx = pygame.mixer.Sound('assets/music/level_end.wav')
+level_end_fx.set_volume(1)
+
+explosive_fx = pygame.mixer.Sound('assets/music/explosion.wav')
+explosive_fx.set_volume(1)
+
+death_fx = pygame.mixer.Sound('assets/music/death.wav')
+death_fx.set_volume(1)
+
+jump_fx = pygame.mixer.Sound('assets/music/jump.wav')
+jump_fx.set_volume(1)
+
+destroy_fx = pygame.mixer.Sound('assets/music/destroy.wav')
+destroy_fx.set_volume(1)
+
+triggered_fx = pygame.mixer.Sound('assets/music/triggered.wav')
+triggered_fx.set_volume(1)
+
+uptrigger_fx = pygame.mixer.Sound('assets/music/uptrigger.wav')
+uptrigger_fx.set_volume(1)
+
+hurt_fx = pygame.mixer.Sound('assets/music/hurt.wav')
+hurt_fx.set_volume(1)
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, x, y, character, scale, speed):
@@ -88,7 +122,6 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, moving_left, moving_right):
         #reset movement variables
-        global SCROLL_THRESH
         screen_scroll = 0
         screen_scroll_y = 0
         dx = 0
@@ -120,6 +153,7 @@ class Player(pygame.sprite.Sprite):
         if self.vel_y > 6:
             self.vel_y
         dy += self.vel_y
+
 
         #check for collision
         level_complete = False
@@ -256,13 +290,9 @@ class Player(pygame.sprite.Sprite):
             self.rect.x -= dx
             screen_scroll = -dx
 
-        if (self.vel_y < 0 and self.rect.top < SCROLL_THRESH) or (self.rect.bottom > (screen_height - SCROLL_THRESH)):
+        if (self.rect.top > (screen_height - SCROLL_THRESH_Y)) or (self.rect.bottom < SCROLL_THRESH_Y):
             self.rect.y -= dy
             screen_scroll_y = -dy
-
-        for platform in platform_group:
-            if (platform.rect.top < SCROLL_THRESH) or (platform.rect.bottom > (screen_height - SCROLL_THRESH)) and platform.rect.colliderect(player.rect):
-                print("UP")
 
 
         return screen_scroll, screen_scroll_y, level_complete
@@ -465,8 +495,8 @@ while running:
     draw_text(screen, FONTS['game_info'], "LEVEL: " + str(level), 30,
               (0, 0, 0), (75, screen_constants['margin_y'] - 30))
     
-    draw_text(screen, FONTS['game_info'], "FPS: " + str(round(clock.get_fps())), 30,
-              (0, 0, 0), (625, screen_constants['margin_y'] - 30))
+    #draw_text(screen, FONTS['game_info'], "FPS: " + str(round(clock.get_fps())), 30,
+              #(0, 0, 0), (625, screen_constants['margin_y'] - 30))
 
     if player.health > 130 and player.health < 160:
         health_color = (255, 255, 0)

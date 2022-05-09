@@ -280,6 +280,33 @@
             ],
             "speed": 4,
             "duration_factor": 45
+        },
+        "72": {
+            "descriptor": "Glurdle",
+            "pos": [
+                7605,
+                4320
+            ],
+            "speed": 4,
+            "duration_factor": 45
+        },
+        "73": {
+            "descriptor": "Glurdle",
+            "pos": [
+                7875,
+                4140
+            ],
+            "speed": 4,
+            "duration_factor": 45
+        },
+        "74": {
+            "descriptor": "Glurdle",
+            "pos": [
+                8280,
+                4095
+            ],
+            "speed": 4,
+            "duration_factor": 45
         }
     }
 }

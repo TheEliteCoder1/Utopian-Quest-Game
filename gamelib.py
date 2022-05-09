@@ -13,38 +13,6 @@ GREEN = (0, 255, 0)
 BLUE = (10, 30, 255)
 
 
-# background music
-music = pygame.mixer.music.load("assets/music/music.mp3")
-pygame.mixer.music.play(-1)
-
-# fx
-coin_fx = pygame.mixer.Sound('assets/music/coin.mp3')
-coin_fx.set_volume(1)
-
-level_end_fx = pygame.mixer.Sound('assets/music/level_end.wav')
-level_end_fx.set_volume(1)
-
-explosive_fx = pygame.mixer.Sound('assets/music/explosion.wav')
-explosive_fx.set_volume(1)
-
-death_fx = pygame.mixer.Sound('assets/music/death.wav')
-death_fx.set_volume(1)
-
-jump_fx = pygame.mixer.Sound('assets/music/jump.wav')
-jump_fx.set_volume(1)
-
-destroy_fx = pygame.mixer.Sound('assets/music/destroy.wav')
-destroy_fx.set_volume(1)
-
-triggered_fx = pygame.mixer.Sound('assets/music/triggered.wav')
-triggered_fx.set_volume(1)
-
-uptrigger_fx = pygame.mixer.Sound('assets/music/uptrigger.wav')
-uptrigger_fx.set_volume(1)
-
-hurt_fx = pygame.mixer.Sound('assets/music/hurt.wav')
-hurt_fx.set_volume(1)
-
 def load_json_data(json_file):
     with open(json_file, 'r') as sf:
         data = sf.read()
