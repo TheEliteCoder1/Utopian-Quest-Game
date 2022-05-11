@@ -15,6 +15,7 @@ GRAVITY = 0.2
 ROWS = 100
 TILE_SIZE = 45
 bg_scroll = 0
+bg_scroll_y = 0
 screen_scroll = 0
 screen_scroll_y = 0
 SCROLL_THRESH = 300
@@ -30,6 +31,7 @@ editable_objects = load_json_data(f'levels/{level}.json')["editable_objects"]
 # define player action variables
 moving_left = False
 moving_right = False
+true_scroll = [0,0]
 
 # background music
 music = pygame.mixer.music.load("assets/music/music.mp3")
@@ -289,11 +291,10 @@ class Player(pygame.sprite.Sprite):
          or (self.rect.left < SCROLL_THRESH and bg_scroll > abs(dx)):
             self.rect.x -= dx
             screen_scroll = -dx
-
-        if (self.rect.top > (screen_height - SCROLL_THRESH_Y)) or (self.rect.bottom < SCROLL_THRESH_Y):
+        if (self.rect.top > screen_height - SCROLL_THRESH and bg_scroll_y < (ROWS * TILE_SIZE) - screen_height and self.vel_y > 0)\
+         or (self.rect.bottom < SCROLL_THRESH and bg_scroll_y > abs(dy) and self.vel_y < 0):
             self.rect.y -= dy
-            screen_scroll_y = -dy
-
+                 
 
         return screen_scroll, screen_scroll_y, level_complete
 
@@ -354,8 +355,11 @@ health_potion_group  = pygame.sprite.Group()
 def draw_bg(screen, background):
     screen.fill((255, 255, 255))
     width = background.get_width()
+    height = background.get_height()
+    background = pygame.transform.scale(background, (width, height))
     for x in range(5):
-        screen.blit(background, ((x * width) - bg_scroll * 0.5, 0))
+        for y in range(5):
+            screen.blit(background, ((x * width) - bg_scroll * 0.5, (y * height) - bg_scroll_y * 0.5))
 
 
 class World():
@@ -524,6 +528,7 @@ while running:
             player.update_action(0)  #0: idle
         screen_scroll, screen_scroll_y, level_complete = player.move(moving_left, moving_right)
         bg_scroll -= screen_scroll
+        bg_scroll_y -= screen_scroll_y
         if level_complete:
             pygame.mixer.music.stop()
             level_end_fx.play()
@@ -531,6 +536,7 @@ while running:
             pygame.mixer.music.play(-1)
             level += 1
             bg_scroll = 0
+            bg_scroll_y = 0
             world_data = []
             key_group.empty()
             health_potion_group.empty()
@@ -564,6 +570,7 @@ while running:
             player = Player(screen, 50, 0, "Boro", 1, 5)
     else:
         bg_scroll = 0
+        bg_scroll_y = 0
         world_data = []
         platform_group.empty()
         key_group.empty()

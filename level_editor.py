@@ -142,8 +142,8 @@ def draw_grid():
 
     # horizontal lines
     for c in range(ROWS + 1):
-        pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE),
-                         (screen_width, c * TILE_SIZE))
+        pygame.draw.line(screen, WHITE, (0, c * TILE_SIZE - y_scroll),
+                         (screen_width, c * TILE_SIZE - y_scroll))
 
 
 # drawing world tiles
